@@ -9,11 +9,16 @@ const Projects = () => {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const isDragging = useRef(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  const { ref: sectionRef, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  // Escuchar redimensionamiento
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const { ref: sectionRef, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
   const revealAnim = useSpring({
     opacity: inView ? 1 : 0,
@@ -21,43 +26,33 @@ const Projects = () => {
     config: { mass: 1, tension: 120, friction: 30 }
   });
 
+  // Lista de proyectos - Las descripciones y nombres vienen del i18n.js
   const myProjects = [
-    { 
-      id: "ms", 
-      name: "Estudio MS", 
-      desc: "Comprehensive digital solution for an accounting firm. Developed with a focus on institutional trust and service management.", 
-      tags: ["React", "Accounting Services", "Clean UI"], 
-      github: "https://github.com/Franker24/Estudio-ms", 
-      demo: "https://estudio-ms.vercel.app/", 
-      image: "/ms.png" 
-    },
-    { id: "jokers", name: "Jokers of Neon", desc: "Dynamic dashboard interface inspired by neon-cyberpunk aesthetics, utilizing advanced motion libraries.", tags: ["React", "Neon UI", "Framer Motion"], github: "https://github.com/Franker24/JOKERS-OF-NEON-React", demo: "#" },
-    { id: "xclone", name: "X-Clone", desc: "Functional social media clone focused on scalable component architecture and modern UI patterns.", tags: ["Tailwind", "React", "Frontend"], github: "https://github.com/Franker24/X-Clon", demo: "#" },
-    { id: "space", name: "SpaceWeb", desc: "Immersive visual experience about space exploration with a focus on smooth CSS animations.", tags: ["HTML", "CSS Pro", "Animations"], github: "https://github.com/Franker24/SpaceWeb", demo: "#" },
-    { id: "currency", name: "Currency Tracker", desc: "Financial application for real-time currency tracking and data visualization.", tags: ["API", "Finance", "JavaScript"], github: "https://github.com/Franker24/Cotizacion-de-monedas-", demo: "#" },
-    { id: "coffee", name: "Coffee Shop", desc: "Specialty coffee e-commerce platform featuring intuitive shopping experience.", tags: ["E-commerce", "React", "State"], github: "https://github.com/Franker24/Coffee_", demo: "#" },
-    { id: "menu", name: "Interactive Menu", desc: "Digital menu solution for the gastronomy industry with mobile-first approach.", tags: ["UX", "Mobile First", "React"], github: "https://github.com/Franker24/Menu", demo: "#" },
-    { id: "form", name: "Smart Form", desc: "Intelligent form system with advanced data validation and user feedback.", tags: ["Forms", "React", "Validation"], github: "https://github.com/Franker24/Form", demo: "#" }
+    { id: "ms", tags: ["React", "Accounting", "Clean UI"], github: "https://github.com/Franker24/Estudio-ms", demo: "https://estudio-ms.vercel.app/", image: "/ms.png" },
+    { id: "jokers", tags: ["React", "Neon UI", "Framer Motion"], github: "https://github.com/Franker24/JOKERS-OF-NEON-React", demo: "#", image: null },
+    { id: "xclone", tags: ["Tailwind", "React", "Frontend"], github: "https://github.com/Franker24/X-Clon", demo: "#", image: null },
+    { id: "space", tags: ["HTML", "CSS Pro"], github: "https://github.com/Franker24/SpaceWeb", demo: "#" },
+    { id: "currency", tags: ["API", "JavaScript"], github: "https://github.com/Franker24/Cotizacion-de-monedas-", demo: "#" },
+    { id: "coffee", tags: ["E-commerce", "React"], github: "https://github.com/Franker24/Coffee_", demo: "#" },
+    { id: "menu", tags: ["UX", "Mobile First"], github: "https://github.com/Franker24/Menu", demo: "#" },
+    { id: "form", tags: ["Forms", "React"], github: "https://github.com/Franker24/Form", demo: "#" }
   ];
 
+  // Configuración de la animación física del carrusel
   const [{ x }, api] = useSpring(() => ({
     x: -currentIndex * 100,
-    config: { mass: 1, tension: 180, friction: 30 }
+    config: { mass: 1, tension: 180, friction: 35 }
   }));
 
   useEffect(() => {
     api.start({ x: -currentIndex * 100 });
   }, [currentIndex, api]);
 
-  const handleCardClick = (index) => {
-    if (isDragging.current) return;
-    setCurrentIndex(index);
-  };
-
-  const bind = useDrag(({ active, movement: [mx], direction: [xDir], cancel, distance }) => {
+  // Lógica de arrastre (Gestos)
+  const bind = useDrag(({ active, movement: [mx], direction: [xDir], cancel, distance, last }) => {
     if (active && distance > 10) isDragging.current = true;
 
-    if (active && Math.abs(mx) > 70) {
+    if (active && Math.abs(mx) > 60) {
       const nextIndex = xDir > 0 ? currentIndex - 1 : currentIndex + 1;
       if (nextIndex >= 0 && nextIndex < myProjects.length) {
         setCurrentIndex(nextIndex);
@@ -65,84 +60,183 @@ const Projects = () => {
       }
     }
 
-    if (!active) {
+    if (last) {
       setTimeout(() => { isDragging.current = false; }, 50);
       api.start({ x: -currentIndex * 100 });
     } else {
       api.start({ x: -currentIndex * 100 + (mx / window.innerWidth) * 100, immediate: true });
     }
-  }, { filterTaps: true, rubberband: true });
+  }, { 
+    axis: 'x', 
+    filterTaps: true, 
+    rubberband: true 
+  });
 
   return (
     <section 
       id="projects" 
       ref={sectionRef} 
-      style={{ padding: '8rem 0', backgroundColor: '#000', overflow: 'hidden' }}
+      style={{ 
+        padding: isMobile ? '5rem 0' : '10rem 0', 
+        backgroundColor: '#000', 
+        overflow: 'hidden',
+        position: 'relative'
+      }}
     >
       <animated.div style={revealAnim}>
         
-        <h3 style={{ fontSize: '4.5rem', fontWeight: '900', color: '#fff', textAlign: 'center', marginBottom: '5rem', letterSpacing: '-4px' }}>
-          {t('projects.section_title', 'Selected')} <span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle', 'Works')}</span>
-        </h3>
+        {/* Título dinámico */}
+        <div style={{ marginBottom: isMobile ? '3rem' : '5rem', textAlign: 'center' }}>
+          <h3 style={{ 
+            fontSize: isMobile ? '2.5rem' : '5rem', 
+            fontWeight: '900', 
+            color: '#fff', 
+            margin: 0,
+            letterSpacing: '-2px' 
+          }}>
+            {t('projects.section_title')} <span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle')}</span>
+          </h3>
+          <p style={{ color: '#475569', fontSize: '1rem', marginTop: '10px' }}>
+             {t('projects.drag_hint', '← Swipe to explore →')}
+          </p>
+        </div>
 
-        <div {...bind()} style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', cursor: isDragging.current ? 'grabbing' : 'grab', touchAction: 'none' }}>
-          <animated.div style={{ display: 'flex', transform: x.to(val => `translate3d(${val}%, 0, 0)`), touchAction: 'none' }}>
+        {/* Contenedor del Carrusel */}
+        <div 
+          {...bind()} 
+          style={{ 
+            width: '100%', 
+            cursor: isDragging.current ? 'grabbing' : 'grab',
+            touchAction: 'pan-y'
+          }}
+        >
+          <animated.div style={{ 
+            display: 'flex', 
+            transform: x.to(val => `translate3d(${val}%, 0, 0)`),
+            touchAction: 'pan-y'
+          }}>
             {myProjects.map((project, index) => {
               const isCenter = currentIndex === index;
               return (
                 <div 
-                  key={index} 
-                  onClick={() => handleCardClick(index)}
+                  key={project.id} 
+                  onClick={() => !isDragging.current && setCurrentIndex(index)}
                   style={{
-                    minWidth: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center',
-                    transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                    minWidth: '100%', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)',
                     transform: isCenter ? 'scale(1)' : 'scale(0.8)',
-                    padding: '0 20px', userSelect: 'none',
-                    cursor: isCenter ? 'default' : 'pointer'
+                    opacity: isCenter ? 1 : 0.4,
+                    padding: isMobile ? '0 15px' : '0 50px', 
+                    userSelect: 'none'
                   }}
                 >
+                  {/* Borde con gradiente dinámico */}
                   <div style={{
-                    width: '100%', maxWidth: '900px', minHeight: '620px', borderRadius: '40px', padding: '2px',
+                    width: '100%', 
+                    maxWidth: '900px', 
+                    height: isMobile ? '520px' : '650px', 
+                    borderRadius: '40px', 
+                    padding: '2px',
+                    position: 'relative',
                     backgroundImage: isCenter 
                       ? 'linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)' 
-                      : 'linear-gradient(144deg, #222, #000)',
-                    transition: 'background 0.5s'
+                      : 'linear-gradient(144deg, #333, #111)',
+                    boxShadow: isCenter ? '0 30px 60px -12px rgba(91, 66, 243, 0.3)' : 'none',
+                    transition: 'all 0.5s ease'
                   }}>
-                    <div style={{ backgroundColor: '#050505', borderRadius: '38px', width: '100%', height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ width: '100%', height: '380px', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ 
+                      backgroundColor: '#050505', 
+                      borderRadius: '38px', 
+                      width: '100%', 
+                      height: '100%', 
+                      overflow: 'hidden', 
+                      display: 'flex', 
+                      flexDirection: 'column' 
+                    }}>
+                      
+                      {/* Imagen */}
+                      <div style={{ width: '100%', height: isMobile ? '220px' : '380px', overflow: 'hidden', position: 'relative' }}>
                         <img 
-                          src={project.image || `https://via.placeholder.com/900x450/050505/333333?text=${project.name}`} 
+                          src={project.image || `https://via.placeholder.com/900x450/050505/333333?text=${t(`projects.items.${project.id}.name`)}`} 
                           alt={project.id} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isCenter ? 1 : 0.3, transition: 'opacity 0.5s' }} 
+                          style={{ 
+                            width: '100%', height: '100%', objectFit: 'cover', 
+                            filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
+                            transition: 'filter 0.5s' 
+                          }} 
                           draggable="false" 
                         />
-                        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%', background: 'linear-gradient(to top, #050505 20%, transparent)' }}></div>
+                        <div style={{ 
+                          position: 'absolute', bottom: 0, left: 0, right: 0, 
+                          height: '60%', 
+                          background: 'linear-gradient(to top, #050505 20%, transparent)' 
+                        }}></div>
                       </div>
 
-                      <div style={{ padding: '3rem', marginTop: '-60px', zIndex: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                        <h4 style={{ fontSize: '2.8rem', fontWeight: '900', color: isCenter ? '#fff' : '#444', transition: 'color 0.5s' }}>
-                          {t(`projects.items.${project.id}.name`, project.name)}
-                        </h4>
-                        
-                        <div style={{ opacity: isCenter ? 1 : 0, transition: 'opacity 0.4s', flexGrow: 1, pointerEvents: isCenter ? 'auto' : 'none' }}>
-                          <p style={{ color: '#94a3b8', fontSize: '1.2rem', lineHeight: '1.7', marginBottom: '2rem', fontWeight: '300' }}>
-                            {t(`projects.items.${project.id}.desc`, project.desc)}
+                      {/* Info del Proyecto */}
+                      <div style={{ 
+                        padding: isMobile ? '1.5rem' : '2.5rem', 
+                        marginTop: isMobile ? '-20px' : '-40px', 
+                        zIndex: 2, flexGrow: 1, 
+                        display: 'flex', flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}>
+                        <div>
+                          <h4 style={{ 
+                            fontSize: isMobile ? '1.8rem' : '3rem', 
+                            fontWeight: '900', 
+                            color: '#fff',
+                            marginBottom: '0.5rem'
+                          }}>
+                            {t(`projects.items.${project.id}.name`)}
+                          </h4>
+                          <p style={{ 
+                            color: '#94a3b8', 
+                            fontSize: isMobile ? '0.9rem' : '1.1rem', 
+                            lineHeight: '1.6',
+                            maxWidth: '700px'
+                          }}>
+                            {t(`projects.items.${project.id}.desc`)}
                           </p>
+                        </div>
+
+                        <div style={{ 
+                          display: 'flex', 
+                          flexDirection: isMobile ? 'column' : 'row', 
+                          justifyContent: 'space-between', 
+                          alignItems: isMobile ? 'flex-start' : 'center', 
+                          gap: '1.5rem' 
+                        }}>
+                          {/* Tags */}
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {project.tags?.map(tag => (
+                              <span key={tag} style={{ 
+                                backgroundColor: 'rgba(91, 66, 243, 0.1)',
+                                color: '#00DDEB', 
+                                border: '1px solid rgba(0,221,235,0.2)', 
+                                padding: '5px 12px', 
+                                borderRadius: '100px', 
+                                fontSize: '0.7rem', 
+                                fontWeight: '700' 
+                              }}>{tag}</span>
+                            ))}
+                          </div>
                           
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                            <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-                              {project.tags?.map(tag => (
-                                <span key={tag} style={{ color: '#00DDEB', border: '1px solid rgba(0,221,235,0.2)', padding: '5px 15px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '600' }}>{tag}</span>
-                              ))}
-                            </div>
-                            <div style={{ display: 'flex', gap: '2rem' }}>
-                              <a href={project.github} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#fff', textDecoration: 'none', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                 <FaGithub /> {t('projects.github', 'GITHUB')}
-                              </a>
-                              <a href={project.demo} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: '#5B42F3', textDecoration: 'none', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                 <FaExternalLinkAlt /> {t('projects.live', 'LIVE')}
-                              </a>
-                            </div>
+                          {/* Links traducidos */}
+                          <div style={{ display: 'flex', gap: '1.5rem' }}>
+                            <a href={project.github} target="_blank" rel="noreferrer" 
+                               onClick={(e) => e.stopPropagation()}
+                               style={{ color: '#fff', textDecoration: 'none', fontWeight: '800', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                               <FaGithub size={18} /> {t('projects.github')}
+                            </a>
+                            <a href={project.demo} target="_blank" rel="noreferrer" 
+                               onClick={(e) => e.stopPropagation()}
+                               style={{ color: '#5B42F3', textDecoration: 'none', fontWeight: '800', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                               <FaExternalLinkAlt size={16} /> {t('projects.live')}
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -154,18 +248,19 @@ const Projects = () => {
           </animated.div>
         </div>
 
+        {/* Indicadores (Dots) */}
         <div style={{ display: 'flex', gap: '12px', marginTop: '4rem', justifyContent: 'center' }}>
           {myProjects.map((_, index) => (
             <div 
               key={index}
               onClick={() => setCurrentIndex(index)}
               style={{
-                width: currentIndex === index ? '45px' : '12px',
-                height: '12px',
-                borderRadius: '6px',
-                backgroundColor: currentIndex === index ? '#AF40FF' : '#222',
+                width: currentIndex === index ? '40px' : '10px',
+                height: '10px',
+                borderRadius: '5px',
+                backgroundColor: currentIndex === index ? '#5B42F3' : '#334155',
                 cursor: 'pointer',
-                transition: 'all 0.6s'
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             />
           ))}

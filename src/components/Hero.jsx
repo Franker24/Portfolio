@@ -14,16 +14,17 @@ const Hero = () => {
   const calc = (x, y) => [x - window.innerWidth / 2, y - window.innerHeight / 2];
 
   // 2. Elementos para la animación de entrada (Trail)
+  // Nota: Ahora los textos se obtienen de t()
   const items = [
     <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-2px' }}>
       Francisco Javier <span style={{ color: '#3b82f6' }}>Kacmajor</span>
     </h1>,
     <h2 style={{ fontSize: 'clamp(1.25rem, 4vw, 1.875rem)', color: '#94a3b8', marginBottom: '2rem', fontWeight: '300' }}>
-      {t('hero.role', 'Fullstack Web Developer | Open to Remote Opportunities')}
+      {t('hero.role')}
     </h2>,
     <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-      <NitroButton href="#projects" text={t('hero.cta_projects', 'View Projects')} primary />
-      <NitroButton href="#info" text={t('hero.cta_about', 'About Me')} />
+      <NitroButton href="#projects" text={t('hero.cta_projects')} primary />
+      <NitroButton href="#info" text={t('hero.cta_about')} />
     </div>
   ];
 
@@ -34,7 +35,6 @@ const Hero = () => {
     delay: 400
   });
 
-  // Función para scroll suave interna (para los botones del Hero)
   const handleScroll = (e, targetId) => {
     e.preventDefault();
     const element = document.querySelector(targetId);
@@ -45,25 +45,22 @@ const Hero = () => {
 
   return (
     <section 
-      id="hero" // <--- CRUCIAL: Esto es lo que permite que el Navbar te encuentre
+      id="hero" 
       onMouseMove={({ clientX: x, clientY: y }) => setBgMove({ xy: calc(x, y) })}
       style={sectionStyle}
     >
-      {/* Capa de fondo con Parallax */}
       <animated.div style={{
         ...backgroundLayerStyle,
         transform: bgMove.xy.to((x, y) => `translate3d(${x / 45}px,${y / 45}px,0) scale(1.1)`),
       }} />
 
-      {/* Contenido del Hero */}
       <div style={{ zIndex: 10, position: 'relative' }}>
         {trail.map((style, index) => (
           <animated.div key={index} style={style}>
-            {/* Si es el div de botones, pasamos la función de scroll */}
             {index === 2 ? (
                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  <NitroButton onClick={(e) => handleScroll(e, '#projects')} href="#projects" text={t('hero.cta_projects', 'View Projects')} primary />
-                  <NitroButton onClick={(e) => handleScroll(e, '#info')} href="#info" text={t('hero.cta_about', 'About Me')} />
+                  <NitroButton onClick={(e) => handleScroll(e, '#projects')} href="#projects" text={t('hero.cta_projects')} primary />
+                  <NitroButton onClick={(e) => handleScroll(e, '#info')} href="#info" text={t('hero.cta_about')} />
                </div>
             ) : items[index]}
           </animated.div>
@@ -108,46 +105,9 @@ const NitroButton = ({ href, text, primary, onClick }) => {
 };
 
 // --- Estilos ---
-const sectionStyle = {
-  height: '100vh',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-  color: '#ffffff',
-  padding: '0 1.5rem',
-  backgroundColor: '#000', // Sincronizado con el resto de tu web
-  position: 'relative',
-  overflow: 'hidden'
-};
-
-const backgroundLayerStyle = {
-  position: 'absolute',
-  top: 0, left: 0, right: 0, bottom: 0,
-  backgroundImage: `radial-gradient(circle at center, rgba(91, 66, 243, 0.15) 0%, rgba(0,0,0,0.8) 100%), url('/hero.svg.png')`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  zIndex: 1
-};
-
-const nitroWrapperStyle = {
-  borderRadius: '20px',
-  padding: '1.5px', // Un poco más grueso para que se vea el gradiente
-  textDecoration: 'none',
-  display: 'inline-block',
-  cursor: 'pointer'
-};
-
-const nitroInnerStyle = {
-  borderRadius: '18.5px',
-  padding: '0.9rem 2.2rem',
-  display: 'flex',
-  alignItems: 'center',
-  color: 'white',
-  fontWeight: '700',
-  fontSize: '0.95rem',
-  letterSpacing: '0.5px'
-};
+const sectionStyle = { height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', color: '#ffffff', padding: '0 1.5rem', backgroundColor: '#000', position: 'relative', overflow: 'hidden' };
+const backgroundLayerStyle = { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: `radial-gradient(circle at center, rgba(91, 66, 243, 0.15) 0%, rgba(0,0,0,0.8) 100%), url('/hero.svg.png')`, backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 1 };
+const nitroWrapperStyle = { borderRadius: '20px', padding: '1.5px', textDecoration: 'none', display: 'inline-block', cursor: 'pointer' };
+const nitroInnerStyle = { borderRadius: '18.5px', padding: '0.9rem 2.2rem', display: 'flex', alignItems: 'center', color: 'white', fontWeight: '700', fontSize: '0.95rem', letterSpacing: '0.5px' };
 
 export default Hero;

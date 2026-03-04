@@ -1,0 +1,38 @@
+/* Colores por defecto (Modo Oscuro - TU ESTILO ORIGINAL) */
+:root {
+  --bg-color: #000000;              /* Negro Puro como pediste */
+  --text-color: #ffffff;           /* Blanco Puro */
+  --text-muted: #cbd5e1;           /* Gris azulado claro */
+  
+  /* Transparencias exactas de tu código original */
+  --card-bg: rgba(255, 255, 255, 0.02); 
+  --card-bg-hover: rgba(59, 130, 246, 0.08);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(59, 130, 246, 0.5);
+  
+  --accent: #3b82f6;               /* El azul que usas en iconos/títulos */
+  --glass-bg: rgba(255, 255, 255, 0.01); /* Fondo del SummaryBox */
+}
+/* Colores cuando el switch activa el modo claro */
+[data-theme='light'] {
+  --bg-color: #f1f5f9;             /* Fondo Gris muy claro / Blanco */
+  --text-color: #0f172a;           /* Texto Negro / Slate oscuro */
+  --text-muted: #475569;           /* Texto gris oscuro */
+  
+  /* Ajustamos las transparencias para fondo claro */
+  --card-bg: rgba(0, 0, 0, 0.03);  
+  --card-bg-hover: rgba(59, 130, 246, 0.1);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(59, 130, 246, 0.4);
+  
+  --accent: #2563eb;               /* Azul un poco más intenso para blanco */
+  --glass-bg: rgba(0, 0, 0, 0.02);
+}
+
+/* Aplicación Global */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  margin: 0;
+}
