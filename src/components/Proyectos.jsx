@@ -28,7 +28,9 @@ const Projects = () => {
 
   // Lista de proyectos - Las descripciones y nombres vienen del i18n.js
   const myProjects = [
-    { id: "ms", tags: ["React", "Accounting", "Clean UI"], github: "https://github.com/Franker24/Estudio-ms", demo: "https://estudio-ms.vercel.app/", image: "/ms.png" },
+    { id: "ms", tags: ["React", "Accounting", "Clean UI"], github: "https://github.com/Franker24/Estudio-ms", demo: "https://estudio-ms.vercel.app/", image: "/ms.png", embed: "https://msestudiocontable.ar/" },
+    { id: "nexcrypto", tags: ["React", "Crypto", "Dashboard UI"], github: "https://github.com/Franker24/NexCrypto", demo: "https://nex-crypto.vercel.app/", image: null, embed: "https://nex-crypto.vercel.app/" },
+    { id: "construtech", tags: ["React", "Construction", "Landing Page"], github: "https://github.com/Franker24/Constru-Tech-", demo: "https://constru-tech-95.vercel.app/", image: null, embed: "https://constru-tech-95.vercel.app/" },
     { id: "jokers", tags: ["React", "Neon UI", "Framer Motion"], github: "https://github.com/Franker24/JOKERS-OF-NEON-React", demo: "#", image: null },
     { id: "xclone", tags: ["Tailwind", "React", "Frontend"], github: "https://github.com/Franker24/X-Clon", demo: "#", image: null },
     { id: "space", tags: ["HTML", "CSS Pro"], github: "https://github.com/Franker24/SpaceWeb", demo: "#" },
@@ -157,18 +159,56 @@ const Projects = () => {
                       flexDirection: 'column' 
                     }}>
                       
-                      {/* Imagen */}
+                      {/* Preview del proyecto */}
                       <div style={{ width: '100%', height: isMobile ? '220px' : '380px', overflow: 'hidden', position: 'relative' }}>
-                        <img 
-                          src={project.image || `https://via.placeholder.com/900x450/050505/333333?text=${t(`projects.items.${project.id}.name`)}`} 
-                          alt={project.id} 
-                          style={{ 
-                            width: '100%', height: '100%', objectFit: 'cover', 
-                            filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-                            transition: 'filter 0.5s' 
-                          }} 
-                          draggable="false" 
-                        />
+                        {project.embed && !isMobile ? (
+                          <iframe
+                            src={project.embed}
+                            title={t(`projects.items.${project.id}.name`)}
+                            loading="lazy"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              border: 'none',
+                              transform: 'scale(1.02)',
+                              transformOrigin: 'top center',
+                              filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
+                              transition: 'filter 0.5s',
+                              pointerEvents: 'none'
+                            }}
+                          />
+                        ) : (
+                          <img 
+                            src={project.image || `https://via.placeholder.com/900x450/050505/333333?text=${t(`projects.items.${project.id}.name`)}`} 
+                            alt={project.id} 
+                            style={{ 
+                              width: '100%', height: '100%', objectFit: 'cover', 
+                              filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
+                              transition: 'filter 0.5s' 
+                            }} 
+                            draggable="false" 
+                          />
+                        )}
+                        {project.embed && !isMobile && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '18px',
+                            right: '18px',
+                            backgroundColor: 'rgba(5, 5, 5, 0.78)',
+                            color: '#00DDEB',
+                            border: '1px solid rgba(0,221,235,0.25)',
+                            borderRadius: '999px',
+                            padding: '6px 12px',
+                            fontSize: '0.7rem',
+                            fontWeight: '800',
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            zIndex: 2,
+                            backdropFilter: 'blur(8px)'
+                          }}>
+                            Live Preview
+                          </div>
+                        )}
                         <div style={{ 
                           position: 'absolute', bottom: 0, left: 0, right: 0, 
                           height: '60%', 

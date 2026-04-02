@@ -41,6 +41,8 @@ i18n
             live: "Live Demo",
             items: {
               ms: { name: "Estudio MS", desc: "Accounting firm landing page with focus on clean UI and professional presence." },
+              nexcrypto: { name: "NexCrypto", desc: "Crypto-focused interface with a modern dashboard feel and live-market inspired visuals." },
+              construtech: { name: "Constru-Tech", desc: "Construction company landing page built to showcase services with a strong commercial presentation." },
               jokers: { name: "Jokers of Neon", desc: "Interactive web experience inspired by Balatro, featuring neon aesthetics and smooth animations." },
               xclone: { name: "X-Clon", desc: "Social media interface clone to practice complex layouts and Tailwind CSS." },
               space: { name: "SpaceWeb", desc: "Educational site about space exploration with immersive CSS effects." },
@@ -87,6 +89,8 @@ i18n
             live: "Demo en vivo",
             items: {
               ms: { name: "Estudio MS", desc: "Landing page para estudio contable con enfoque en una interfaz limpia y presencia profesional." },
+              nexcrypto: { name: "NexCrypto", desc: "Interfaz orientada al mundo cripto con estilo de dashboard moderno y visuales inspirados en mercado en vivo." },
+              construtech: { name: "Constru-Tech", desc: "Landing page para empresa de construccion pensada para mostrar servicios con una presencia comercial fuerte." },
               jokers: { name: "Jokers of Neon", desc: "Experiencia web interactiva inspirada en Balatro, con estética neón y animaciones fluidas." },
               xclone: { name: "X-Clon", desc: "Clon de interfaz de red social para practicar layouts complejos y Tailwind CSS." },
               space: { name: "SpaceWeb", desc: "Sitio educativo sobre exploración espacial con efectos visuales inmersivos." },
