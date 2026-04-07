@@ -5,6 +5,42 @@ import { useInView } from 'react-intersection-observer';
 import { FaReact, FaNodeJs, FaUniversity, FaCode } from 'react-icons/fa';
 import { SiTypescript, SiMongodb, SiNextdotjs, SiExpress, SiOpenlayers } from 'react-icons/si';
 
+const HoverBox = ({ children, style }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [hoverSpring, hoverApi] = useSpring(() => ({
+    y: 0,
+    scale: 1,
+    glow: 0
+  }));
+
+  const handleEnter = () => {
+    setIsHovered(true);
+    hoverApi.start({ y: -4, scale: 1.015, glow: 1 });
+  };
+
+  const handleLeave = () => {
+    setIsHovered(false);
+    hoverApi.start({ y: 0, scale: 1, glow: 0 });
+  };
+
+  return (
+    <animated.div
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      style={{
+        ...style,
+        transform: hoverSpring.scale.to((scale) => `translateY(${hoverSpring.y.get()}px) scale(${scale})`),
+        boxShadow: hoverSpring.glow.to((glow) => `0 24px 50px rgba(59, 130, 246, ${0.16 * glow})`),
+        borderColor: isHovered ? 'var(--border-hover)' : 'var(--border-color)',
+        backgroundColor: isHovered ? 'var(--card-bg-hover)' : style?.backgroundColor,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease'
+      }}
+    >
+      {children}
+    </animated.div>
+  );
+};
+
 // --- SkillCard ---
 const SkillCard = ({ skill, icon: Icon, url, style }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -101,22 +137,22 @@ const Info = () => {
 
       {/* SUMMARY BOX */}
       <animated.div style={{ ...summaryWrapperStyle, ...animFadeUp(0) }}>
-        <div style={summaryBoxStyle}>
+        <HoverBox style={summaryBoxStyle}>
           <div style={statusBadgeStyle}>
             <div style={pulseDotStyle}></div>
             <span style={statusTextStyle}>{t('info.status')}</span>
           </div>
           <h3 style={titleStyle}>
-            {t('info.title_p1')} <br/> <span style={{ color: 'var(--accent)' }}>{t('info.title_p2')}</span>
+            {t('info.title_p1')} <br /> <span style={{ color: 'var(--accent)' }}>{t('info.title_p2')}</span>
           </h3>
           <p style={descriptionStyle}>{t('info.description')}</p>
-        </div>
+        </HoverBox>
       </animated.div>
 
       {/* EXPERIENCE */}
       <animated.div style={{ ...experienceContainerStyle, ...animFadeUp(400) }}>
         <h4 style={subTitleStyle}>{t('info.exp_title')}</h4>
-        <div style={expCardStyle}>
+        <HoverBox style={expCardStyle}>
             <div style={expHeaderStyle}>
                <SiOpenlayers style={{ color: 'var(--accent)', fontSize: '2.5rem' }} />
                <div>
@@ -126,7 +162,7 @@ const Info = () => {
                <span style={dateBadgeStyle}>{t('info.exp_date')}</span>
             </div>
             <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.1rem' }}>{t('info.exp_desc')}</p>
-        </div>
+        </HoverBox>
       </animated.div>
 
       {/* SKILLS GRID */}
