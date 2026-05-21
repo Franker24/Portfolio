@@ -51,6 +51,7 @@ const themePalette = {
 const TimelineCard = ({ project, index, isMobile, colors, t }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [isHovered, setIsHovered] = useState(false);
+  const isLeft = index % 2 === 0;
 
   const animProps = useSpring({
     opacity: inView ? 1 : 0,
@@ -70,25 +71,65 @@ const TimelineCard = ({ project, index, isMobile, colors, t }) => {
       display: 'flex',
       justifyContent: 'flex-start',
       width: '100%',
-      paddingLeft: isMobile ? '50px' : '90px',
-      marginBottom: isMobile ? '4rem' : '6rem',
-      position: 'relative'
+      paddingLeft: isMobile ? '50px' : '0px',
+      marginBottom: isMobile ? '4rem' : '0px',
+      position: 'relative',
+      height: '100%',
+      boxSizing: 'border-box'
     }}>
-      {/* Timeline Node Dot centered on vertical straight track */}
-      <animated.div style={{
-        position: 'absolute',
-        left: isMobile ? '25px' : '40px',
-        top: '50px',
-        transform: 'translateX(-50%)',
-        width: isMobile ? '16px' : '20px',
-        height: isMobile ? '16px' : '20px',
-        borderRadius: '50%',
-        backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
-        border: `${isMobile ? 3 : 4}px solid ${colors.sectionBg}`,
-        boxShadow: isHovered ? '0 0 20px rgba(0, 221, 235, 0.6)' : '0 0 15px rgba(91, 66, 243, 0.5)',
-        zIndex: 2,
-        transition: 'all 0.3s ease'
-      }} />
+      {/* Mobile Timeline Node Dot centered on vertical straight track */}
+      {isMobile && (
+        <animated.div style={{
+          position: 'absolute',
+          left: '25px',
+          top: '50px',
+          transform: 'translateX(-50%)',
+          width: '16px',
+          height: '16px',
+          borderRadius: '50%',
+          backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
+          border: `3px solid ${colors.sectionBg}`,
+          boxShadow: isHovered ? '0 0 20px rgba(0, 221, 235, 0.6)' : '0 0 15px rgba(91, 66, 243, 0.5)',
+          zIndex: 2,
+          transition: 'all 0.3s ease'
+        }} />
+      )}
+
+      {/* Desktop Timeline horizontal connector line and dot */}
+      {!isMobile && (
+        <>
+          {/* Connector line */}
+          <div style={{
+            position: 'absolute',
+            [isLeft ? 'right' : 'left']: '-60px',
+            top: '120px',
+            width: '60px',
+            height: '2px',
+            background: isHovered 
+              ? (isLeft ? 'linear-gradient(90deg, #5B42F3, #00DDEB)' : 'linear-gradient(90deg, #00DDEB, #5B42F3)')
+              : 'rgba(255, 255, 255, 0.1)',
+            zIndex: 1,
+            transition: 'all 0.3s ease',
+            boxShadow: isHovered ? '0 0 10px rgba(0, 221, 235, 0.5)' : 'none'
+          }} />
+          {/* Connector Dot */}
+          <animated.div style={{
+            position: 'absolute',
+            left: isLeft ? 'auto' : '-60px',
+            right: isLeft ? '-60px' : 'auto',
+            top: '120px',
+            transform: isLeft ? 'translate(50%, -50%)' : 'translate(-50%, -50%)',
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
+            border: `3px solid ${colors.sectionBg}`,
+            boxShadow: isHovered ? '0 0 15px rgba(0, 221, 235, 0.8)' : '0 0 8px rgba(91, 66, 243, 0.4)',
+            zIndex: 2,
+            transition: 'all 0.3s ease'
+          }} />
+        </>
+      )}
 
       <animated.div 
         onMouseEnter={() => setIsHovered(true)}
@@ -100,7 +141,9 @@ const TimelineCard = ({ project, index, isMobile, colors, t }) => {
           padding: '1px',
           borderRadius: '32px',
           background: isHovered ? 'linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)' : colors.inactiveBorder,
-          position: 'relative'
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
         <div style={{
@@ -109,14 +152,15 @@ const TimelineCard = ({ project, index, isMobile, colors, t }) => {
           padding: '20px',
           height: '100%',
           display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
+          flexDirection: 'column',
           gap: '20px',
           backdropFilter: 'blur(10px)',
-          alignItems: 'stretch'
+          alignItems: 'stretch',
+          flexGrow: 1
         }}>
           <div style={{ 
-            width: isMobile ? '100%' : '55%', 
-            height: isMobile ? '180px' : '340px', 
+            width: '100%', 
+            height: isMobile ? '180px' : '240px', 
             borderRadius: '20px', 
             overflow: 'hidden', 
             backgroundColor: colors.previewShell, 
@@ -176,7 +220,7 @@ const TimelineCard = ({ project, index, isMobile, colors, t }) => {
             )}
           </div>
 
-          <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: isMobile ? '1.2rem' : '1.8rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: isMobile ? '1.2rem' : '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <h4 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: '900', color: colors.title, marginBottom: '0.8rem', letterSpacing: '-0.5px' }}>{t(`projects.items.${project.id}.name`)}</h4>
               <p style={{ color: colors.body, fontSize: isMobile ? '0.85rem' : '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>{t(`projects.items.${project.id}.desc`)}</p>
@@ -727,13 +771,19 @@ const Projects = ({ theme = 'dark' }) => {
             {t('projects.section_subtitle') === 'Projects' ? 'More ' : 'Más '}<span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle') === 'Projects' ? 'Projects' : 'Proyectos'}</span>
           </h3>
 
-          <div style={{ position: 'relative' }}>
+          <div style={{ 
+            position: 'relative',
+            display: isMobile ? 'block' : 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+            columnGap: isMobile ? '0' : '120px',
+            rowGap: isMobile ? '0' : '80px'
+          }}>
             {/* The responsive straight vertical line track */}
             <div style={{
               position: 'absolute',
               left: isMobile ? '25px' : '50%',
-              top: 0,
-              bottom: '50px',
+              top: isMobile ? '0px' : '120px',
+              bottom: isMobile ? '50px' : '150px',
               width: '4px',
               transform: 'translateX(-50%)',
               pointerEvents: 'none',

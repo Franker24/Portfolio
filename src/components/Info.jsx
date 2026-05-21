@@ -96,7 +96,7 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
   const badge = t(`info.badges.${badgeKey}`);
 
   const cardStyle = {
-    padding: isMobile ? '2rem 1.25rem' : '3.5rem 3rem',
+    padding: isMobile ? '2rem 1.25rem' : '3rem 2.2rem',
     borderRadius: '36px',
     border: '1px solid var(--border-color)',
     height: '100%',
@@ -112,8 +112,8 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        marginBottom: isMobile ? '1.5rem' : '3rem', 
-        paddingBottom: isMobile ? '1rem' : '1.5rem', 
+        marginBottom: isMobile ? '1.5rem' : '2rem', 
+        paddingBottom: isMobile ? '1rem' : '1.25rem', 
         borderBottom: '1px solid var(--border-color)' 
       }}>
         <h4 style={{ fontSize: isMobile ? '1.5rem' : '1.8rem', fontWeight: '900', color: 'var(--text-color)', margin: 0, letterSpacing: '-1px' }}>
@@ -125,8 +125,8 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
       {/* Grilla de iconos con más espacio */}
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(90px, 1fr))', 
-        gap: isMobile ? '1rem' : '1.5rem',
+        gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(80px, 1fr))', 
+        gap: isMobile ? '1rem' : '1.25rem',
         justifyItems: 'center',
         width: '100%'
       }}>
@@ -474,7 +474,7 @@ const Info = () => {
 
   const responsiveCategoryGridStyle = {
     display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+    gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
     gap: isMobile ? '2rem' : '3.5rem',
     width: '100%'
   };
@@ -552,7 +552,7 @@ const Info = () => {
       </div>
 
       {/* SKILLS CATEGORY GRID */}
-      <div style={{ width: '100%', maxWidth: '1200px', zIndex: 1, marginTop: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: '1300px', zIndex: 1, marginTop: '2rem' }}>
         <h4 className="gsap-tech-title" style={neonTitleStyle}>{t('info.tech_stack')}</h4>
         <div style={responsiveCategoryGridStyle}>
           {skillCategories.map((category, index) => (
