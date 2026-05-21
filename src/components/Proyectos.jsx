@@ -48,6 +48,165 @@ const themePalette = {
   }
 };
 
+const TimelineCard = ({ project, index, isMobile, colors, t }) => {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const animProps = useSpring({
+    opacity: inView ? 1 : 0,
+    transform: inView ? 'translateY(0px)' : 'translateY(50px)',
+    config: { tension: 120, friction: 20 },
+    delay: 100
+  });
+
+  const hoverAnim = useSpring({
+    transform: isHovered ? 'translateY(-8px)' : 'translateY(0px)',
+    boxShadow: isHovered ? `0 25px 50px -12px rgba(91, 66, 243, 0.25)` : `0 10px 30px -10px rgba(0,0,0,0.1)`,
+    config: { tension: 300, friction: 20 }
+  });
+
+  return (
+    <div ref={ref} style={{
+      display: 'flex',
+      justifyContent: 'flex-start',
+      width: '100%',
+      paddingLeft: isMobile ? '50px' : '90px',
+      marginBottom: isMobile ? '4rem' : '6rem',
+      position: 'relative'
+    }}>
+      {/* Timeline Node Dot centered on vertical straight track */}
+      <animated.div style={{
+        position: 'absolute',
+        left: isMobile ? '25px' : '40px',
+        top: '50px',
+        transform: 'translateX(-50%)',
+        width: isMobile ? '16px' : '20px',
+        height: isMobile ? '16px' : '20px',
+        borderRadius: '50%',
+        backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
+        border: `${isMobile ? 3 : 4}px solid ${colors.sectionBg}`,
+        boxShadow: isHovered ? '0 0 20px rgba(0, 221, 235, 0.6)' : '0 0 15px rgba(91, 66, 243, 0.5)',
+        zIndex: 2,
+        transition: 'all 0.3s ease'
+      }} />
+
+      <animated.div 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          ...animProps,
+          ...hoverAnim,
+          width: '100%',
+          padding: '1px',
+          borderRadius: '32px',
+          background: isHovered ? 'linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)' : colors.inactiveBorder,
+          position: 'relative'
+        }}
+      >
+        <div style={{
+          backgroundColor: colors.panelBg,
+          borderRadius: '31px',
+          padding: '20px',
+          height: '100%',
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: '20px',
+          backdropFilter: 'blur(10px)',
+          alignItems: 'stretch'
+        }}>
+          <div style={{ 
+            width: isMobile ? '100%' : '55%', 
+            height: isMobile ? '180px' : '340px', 
+            borderRadius: '20px', 
+            overflow: 'hidden', 
+            backgroundColor: colors.previewShell, 
+            position: 'relative',
+            flexShrink: 0
+          }}>
+            {project.embed ? (
+              <iframe
+                src={project.embed}
+                title={project.id}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  pointerEvents: 'none',
+                  filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
+                  transition: 'all 0.5s ease',
+                  transform: isHovered ? 'scale(1.02)' : 'scale(1)'
+                }}
+              />
+            ) : (
+              <>
+                <img 
+                  src={project.image} 
+                  alt={project.id} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0, zIndex: 1, transition: 'transform 0.5s ease', transform: isHovered ? 'scale(1.05)' : 'scale(1)' }} 
+                  onError={(e) => { e.target.style.display = 'none'; }} 
+                />
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.hint, fontSize: '0.9rem', letterSpacing: '1px', position: 'absolute', inset: 0 }}>
+                  [ IMG: {project.image} ]
+                </div>
+              </>
+            )}
+
+            {project.embed && (
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                backgroundColor: colors.liveBadgeBg,
+                color: '#00DDEB',
+                border: colors.liveBadgeBorder,
+                borderRadius: '999px',
+                padding: '4px 10px',
+                fontSize: '0.65rem',
+                fontWeight: '800',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                zIndex: 2,
+                backdropFilter: 'blur(8px)',
+                opacity: isHovered ? 1 : 0.6,
+                transition: 'opacity 0.3s ease'
+              }}>
+                Live
+              </div>
+            )}
+          </div>
+
+          <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: isMobile ? '1.2rem' : '1.8rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <h4 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: '900', color: colors.title, marginBottom: '0.8rem', letterSpacing: '-0.5px' }}>{t(`projects.items.${project.id}.name`)}</h4>
+              <p style={{ color: colors.body, fontSize: isMobile ? '0.85rem' : '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>{t(`projects.items.${project.id}.desc`)}</p>
+            </div>
+            
+            <div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '1.5rem' }}>
+                {project.tags.map(tag => (
+                  <span key={tag} style={{ backgroundColor: colors.tagBg, color: '#00DDEB', border: colors.tagBorder, padding: '6px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '800' }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <a href={project.github} target="_blank" rel="noreferrer" style={{ color: colors.linkColor, fontSize: '0.85rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+                  <FaGithub size={18} /> {t('projects.github')}
+                </a>
+                <a href={project.demo} target="_blank" rel="noreferrer" style={{ color: colors.accentLink, fontSize: '0.85rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+                  <FaExternalLinkAlt size={16} /> {t('projects.live')}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </animated.div>
+    </div>
+  );
+};
+
 const Projects = ({ theme = 'dark' }) => {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -71,18 +230,18 @@ const Projects = ({ theme = 'dark' }) => {
 
   const myProjects = [
     {
-      id: 'astra',
-      tags: ['JavaScript', 'AI UI', 'Modern Landing'],
-      github: 'https://github.com/Franker24/ASTRA',
-      demo: 'https://astra-eight-steel.vercel.app',
-      embed: 'https://astra-eight-steel.vercel.app'
+      id: 'securify',
+      tags: ['TypeScript', 'Security', 'Auth UI'],
+      github: 'https://github.com/Franker24/Securify',
+      demo: 'https://securify-two.vercel.app',
+      embed: 'https://securify-two.vercel.app'
     },
     {
-      id: 'nexcrypto',
-      tags: ['React', 'Crypto', 'Dashboard UI'],
-      github: 'https://github.com/Franker24/NexCrypto',
-      demo: 'https://nex-crypto.vercel.app',
-      embed: 'https://nex-crypto.vercel.app'
+      id: 'watchweb',
+      tags: ['JavaScript', 'Media', 'Streaming UI'],
+      github: 'https://github.com/Franker24/WatchWeb',
+      demo: 'https://watch-web-gules.vercel.app',
+      embed: 'https://watch-web-gules.vercel.app'
     },
     {
       id: 'coffeeweb',
@@ -92,11 +251,11 @@ const Projects = ({ theme = 'dark' }) => {
       embed: 'https://coffee-web-peach.vercel.app'
     },
     {
-      id: 'kineticcourt',
-      tags: ['TypeScript', 'Sports UI', 'Bold Visuals'],
-      github: 'https://github.com/Franker24/KINETIC-COURT',
-      demo: 'https://kinetic-court.vercel.app',
-      embed: 'https://kinetic-court.vercel.app'
+      id: 'astra',
+      tags: ['JavaScript', 'AI UI', 'Modern Landing'],
+      github: 'https://github.com/Franker24/ASTRA',
+      demo: 'https://astra-eight-steel.vercel.app',
+      embed: 'https://astra-eight-steel.vercel.app'
     },
     {
       id: 'construtech',
@@ -104,21 +263,49 @@ const Projects = ({ theme = 'dark' }) => {
       github: 'https://github.com/Franker24/Constru-Tech-',
       demo: 'https://constru-tech-95.vercel.app',
       embed: 'https://constru-tech-95.vercel.app'
+    }
+  ];
+
+  const timelineProjects = [
+    {
+      id: 'wisa',
+      tags: ['TypeScript', 'Saas', 'Modern UI'],
+      github: 'https://github.com/Franker24/Wisa',
+      demo: 'https://wisa-neon.vercel.app',
+      embed: 'https://wisa-neon.vercel.app',
+      image: '/wisa.png'
+    },
+    {
+      id: 'nexcrypto',
+      tags: ['React', 'Crypto', 'Dashboard UI'],
+      github: 'https://github.com/Franker24/NexCrypto',
+      demo: 'https://nex-crypto.vercel.app',
+      embed: 'https://nex-crypto.vercel.app',
+      image: '/nexcrypto.png'
+    },
+    {
+      id: 'kineticcourt',
+      tags: ['TypeScript', 'Sports UI', 'Bold Visuals'],
+      github: 'https://github.com/Franker24/KINETIC-COURT',
+      demo: 'https://kinetic-court.vercel.app',
+      embed: 'https://kinetic-court.vercel.app',
+      image: '/kinetic.png'
     },
     {
       id: 'ms',
       tags: ['React', 'Accounting', 'Clean UI'],
       github: 'https://github.com/Franker24/Estudio-ms',
       demo: 'https://estudio-ms.vercel.app',
-      image: '/ms.png',
-      embed: 'https://estudio-ms.vercel.app'
+      embed: 'https://estudio-ms.vercel.app',
+      image: '/ms.png'
     },
     {
       id: 'currency',
       tags: ['HTML', 'API', 'Exchange Rates'],
       github: 'https://github.com/Franker24/Cotizacion-de-monedas-',
       demo: 'https://mock-omega-eight.vercel.app/',
-      embed: 'https://mock-omega-eight.vercel.app/'
+      embed: 'https://mock-omega-eight.vercel.app/',
+      image: '/currency.png'
     }
   ];
 
@@ -166,8 +353,22 @@ const Projects = ({ theme = 'dark' }) => {
     rubberband: true
   });
 
-  const renderPreview = (project, isCenter) => {
-    if (project.embed && !isMobile) {
+
+
+  const renderPreview = (project, isCenter, index, currentIndex) => {
+    const isNear = Math.abs(currentIndex - index) <= 1 || 
+                   (currentIndex === 0 && index === myProjects.length - 1) ||
+                   (currentIndex === myProjects.length - 1 && index === 0);
+
+    // Show embed (iframe) on both desktop and mobile if available
+    if (project.embed) {
+      if (!isNear) {
+        return (
+          <div style={{ width: '100%', height: '100%', backgroundColor: colors.previewShell, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: colors.hint, fontSize: '0.9rem', letterSpacing: '0.1em' }}>Loading...</span>
+          </div>
+        );
+      }
       return (
         <iframe
           src={project.embed}
@@ -358,21 +559,21 @@ const Projects = ({ theme = 'dark' }) => {
                             background: colors.previewShell
                           }}
                         >
-                          {renderPreview(project, isCenter)}
+                          {renderPreview(project, isCenter, index, currentIndex)}
                         </div>
 
-                        {project.embed && !isMobile && (
+                        {project.embed && (
                           <div
                             style={{
                               position: 'absolute',
-                              top: '18px',
-                              right: '18px',
+                              top: isMobile ? '18px' : '24px',
+                              right: isMobile ? '18px' : '24px',
                               backgroundColor: colors.liveBadgeBg,
                               color: '#00DDEB',
                               border: colors.liveBadgeBorder,
                               borderRadius: '999px',
                               padding: '6px 12px',
-                              fontSize: '0.7rem',
+                              fontSize: isMobile ? '0.6rem' : '0.7rem',
                               fontWeight: '800',
                               letterSpacing: '0.08em',
                               textTransform: 'uppercase',
@@ -519,6 +720,76 @@ const Projects = ({ theme = 'dark' }) => {
             />
           ))}
         </div>
+
+        {/* TIMELINE SECTION */}
+        <div style={{ marginTop: '10rem', position: 'relative', maxWidth: '1100px', margin: '10rem auto 0', padding: '0 2rem' }}>
+          <h3 style={{ fontSize: isMobile ? '2.2rem' : '4rem', fontWeight: '900', color: colors.title, textAlign: 'center', marginBottom: '6rem', letterSpacing: '-1px' }}>
+            {t('projects.section_subtitle') === 'Projects' ? 'More ' : 'Más '}<span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle') === 'Projects' ? 'Projects' : 'Proyectos'}</span>
+          </h3>
+
+          <div style={{ position: 'relative' }}>
+            {/* The responsive straight vertical line track */}
+            <div style={{
+              position: 'absolute',
+              left: isMobile ? '25px' : '50%',
+              top: 0,
+              bottom: '50px',
+              width: '4px',
+              transform: 'translateX(-50%)',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}>
+              <svg width="100%" height="100%" style={{ overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#AF40FF" />
+                    <stop offset="50%" stopColor="#5B42F3" />
+                    <stop offset="100%" stopColor="#00DDEB" />
+                  </linearGradient>
+                  <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                {/* Straight line base track (gray) */}
+                <line
+                  x1="50%"
+                  y1="0"
+                  x2="50%"
+                  y2="100%"
+                  stroke="rgba(255, 255, 255, 0.08)"
+                  strokeWidth="4"
+                />
+                {/* Glowing neon straight vertical line */}
+                <line
+                  x1="50%"
+                  y1="0"
+                  x2="50%"
+                  y2="100%"
+                  stroke="url(#lineGrad)"
+                  strokeWidth="4"
+                  filter="url(#neonGlow)"
+                  style={{ opacity: 0.8 }}
+                />
+              </svg>
+            </div>
+            
+            {timelineProjects.map((project, index) => (
+              <TimelineCard 
+                key={project.id} 
+                project={project} 
+                index={index} 
+                isMobile={isMobile} 
+                colors={colors} 
+                t={t} 
+              />
+            ))}
+          </div>
+        </div>
+
       </animated.div>
     </section>
   );

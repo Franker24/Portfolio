@@ -10,6 +10,9 @@
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(59, 130, 246, 0.5);
   
+  --skill-bg: rgba(255, 255, 255, 0.015);
+  --skill-bg-hover: rgba(255, 255, 255, 0.05);
+  
   --accent: #3b82f6;               /* El azul que usas en iconos/títulos */
   --glass-bg: rgba(255, 255, 255, 0.01); /* Fondo del SummaryBox */
 }
@@ -24,6 +27,9 @@
   --card-bg-hover: rgba(59, 130, 246, 0.1);
   --border-color: rgba(0, 0, 0, 0.1);
   --border-hover: rgba(59, 130, 246, 0.4);
+  
+  --skill-bg: rgba(0, 0, 0, 0.02);
+  --skill-bg-hover: rgba(0, 0, 0, 0.06);
   
   --accent: #2563eb;               /* Azul un poco más intenso para blanco */
   --glass-bg: rgba(0, 0, 0, 0.02);
