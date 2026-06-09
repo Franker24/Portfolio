@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3500);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -31,7 +31,7 @@ function App() {
   const appStyle = {
     backgroundColor: 'var(--bg-color)',
     minHeight: '100vh',
-    width: '100vw',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',

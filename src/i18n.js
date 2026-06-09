@@ -78,6 +78,7 @@ i18n
             drag_hint: '<- Swipe to explore ->',
             github: 'Source',
             live: 'Live Demo',
+            load_interactive: 'Load Interactive Preview',
             items: {
               securify: { name: 'Securify', desc: 'Secure authentication interface with a clean, modern UI.' },
               wisa: { name: 'Wisa', desc: 'SaaS platform showcasing a modern, high-performance user interface.' },
@@ -165,6 +166,7 @@ i18n
             drag_hint: '<- Desliza para explorar ->',
             github: 'Codigo',
             live: 'Demo en vivo',
+            load_interactive: 'Cargar vista interactiva',
             items: {
               securify: { name: 'Securify', desc: 'Interfaz de autenticación segura con un diseño limpio y moderno.' },
               wisa: { name: 'Wisa', desc: 'Plataforma SaaS que destaca por una interfaz de usuario moderna y de alto rendimiento.' },

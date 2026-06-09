@@ -48,6 +48,165 @@ const themePalette = {
   }
 };
 
+const PremiumThumbnail = ({ project, colors, isHovered, t, isMobile }) => {
+  const [imageError, setImageError] = useState(!project.image);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  if (project.embed && isLoaded) {
+    return (
+      <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+        <iframe
+          src={project.embed}
+          title={t(`projects.items.${project.id}.name`)}
+          loading="lazy"
+          style={{
+            width: '100%',
+            height: '100%',
+            border: 'none',
+            pointerEvents: 'none',
+            filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
+            transition: 'all 0.5s ease',
+            transform: isHovered ? 'scale(1.02)' : 'scale(1)'
+          }}
+        />
+        {/* Transparent touch event blocker overlay to allow scrolling */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 10,
+          cursor: 'grab',
+          backgroundColor: 'transparent'
+        }} />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      position: 'relative',
+      overflow: 'hidden',
+      background: imageError 
+        ? 'linear-gradient(135deg, rgba(91, 66, 243, 0.15) 0%, rgba(0, 221, 235, 0.05) 100%)' 
+        : 'transparent',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'all 0.5s ease'
+    }}>
+      {!imageError && (
+        <img 
+          src={project.image} 
+          alt={project.id} 
+          onError={() => setImageError(true)}
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            transition: 'transform 0.5s ease', 
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
+          }} 
+        />
+      )}
+      {imageError && (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '1rem',
+          textAlign: 'center',
+          zIndex: 2
+        }}>
+          <span style={{
+            fontSize: '0.65rem',
+            fontWeight: '800',
+            letterSpacing: '3px',
+            color: '#00DDEB',
+            textTransform: 'uppercase',
+            opacity: 0.8
+          }}>
+            {t(`projects.items.${project.id}.name`) ? 'Project' : 'Demo'}
+          </span>
+          <span style={{
+            fontSize: '1.25rem',
+            fontWeight: '900',
+            color: colors.title,
+            letterSpacing: '-0.5px'
+          }}>
+            {t(`projects.items.${project.id}.name`) || project.id}
+          </span>
+        </div>
+      )}
+
+      {/* Button to load interactive preview - visible on hover (desktop) or always (mobile) */}
+      {project.embed && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: isHovered ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 5,
+          opacity: isHovered || isMobile ? 1 : 0,
+          transition: 'all 0.3s ease',
+          pointerEvents: isHovered || isMobile ? 'auto' : 'none'
+        }}>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsLoaded(true);
+            }}
+            style={{
+              padding: '0.6rem 1.2rem',
+              borderRadius: '100px',
+              border: '1px solid rgba(0, 221, 235, 0.5)',
+              backgroundColor: 'rgba(91, 66, 243, 0.85)',
+              color: '#00DDEB',
+              fontWeight: '700',
+              fontSize: '0.75rem',
+              letterSpacing: '0.5px',
+              cursor: 'pointer',
+              boxShadow: '0 0 15px rgba(0, 221, 235, 0.25)',
+              backdropFilter: 'blur(5px)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 221, 235, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 221, 235, 0.25)';
+            }}
+          >
+            {t('projects.load_interactive')}
+          </button>
+        </div>
+      )}
+
+      {/* Visual neon outline inside the card */}
+      <div style={{
+        position: 'absolute',
+        inset: '10px',
+        border: '1px solid rgba(0, 221, 235, 0.15)',
+        borderRadius: '12px',
+        pointerEvents: 'none',
+        zIndex: 2,
+        transition: 'border-color 0.3s ease',
+        borderColor: isHovered ? 'rgba(0, 221, 235, 0.4)' : 'rgba(0, 221, 235, 0.15)'
+      }} />
+    </div>
+  );
+};
+
 const TimelineCard = ({ project, index, isMobile, colors, t }) => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [isHovered, setIsHovered] = useState(false);
@@ -167,34 +326,13 @@ const TimelineCard = ({ project, index, isMobile, colors, t }) => {
             position: 'relative',
             flexShrink: 0
           }}>
-            {project.embed ? (
-              <iframe
-                src={project.embed}
-                title={project.id}
-                loading="lazy"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  border: 'none',
-                  pointerEvents: 'none',
-                  filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
-                  transition: 'all 0.5s ease',
-                  transform: isHovered ? 'scale(1.02)' : 'scale(1)'
-                }}
-              />
-            ) : (
-              <>
-                <img 
-                  src={project.image} 
-                  alt={project.id} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0, zIndex: 1, transition: 'transform 0.5s ease', transform: isHovered ? 'scale(1.05)' : 'scale(1)' }} 
-                  onError={(e) => { e.target.style.display = 'none'; }} 
-                />
-                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.hint, fontSize: '0.9rem', letterSpacing: '1px', position: 'absolute', inset: 0 }}>
-                  [ IMG: {project.image} ]
-                </div>
-              </>
-            )}
+            <PremiumThumbnail 
+              project={project} 
+              colors={colors} 
+              isHovered={isHovered} 
+              t={t} 
+              isMobile={isMobile}
+            />
 
             {project.embed && (
               <div style={{
@@ -255,6 +393,7 @@ const Projects = ({ theme = 'dark' }) => {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [loadedPreviews, setLoadedPreviews] = useState({});
   const isDragging = useRef(false);
   const colors = themePalette[theme] || themePalette.dark;
 
@@ -400,36 +539,80 @@ const Projects = ({ theme = 'dark' }) => {
 
 
   const renderPreview = (project, isCenter, index, currentIndex) => {
-    const isNear = Math.abs(currentIndex - index) <= 1 || 
-                   (currentIndex === 0 && index === myProjects.length - 1) ||
-                   (currentIndex === myProjects.length - 1 && index === 0);
-
-    // Show embed (iframe) on both desktop and mobile if available
-    if (project.embed) {
-      if (!isNear) {
-        return (
-          <div style={{ width: '100%', height: '100%', backgroundColor: colors.previewShell, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: colors.hint, fontSize: '0.9rem', letterSpacing: '0.1em' }}>Loading...</span>
-          </div>
-        );
-      }
+    // If it's mobile, we NEVER load the iframe. Just show the beautiful fallback preview.
+    if (isMobile) {
       return (
-        <iframe
-          src={project.embed}
-          title={t(`projects.items.${project.id}.name`)}
-          loading="lazy"
+        <div
           style={{
             width: '100%',
             height: '100%',
-            border: 'none',
-            borderRadius: '26px',
-            transform: 'scale(1.01)',
-            transformOrigin: 'top center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem',
+            background: colors.fallbackBg,
+            color: colors.fallbackText,
+            textAlign: 'center',
             filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-            transition: 'filter 0.5s',
-            pointerEvents: 'none'
+            transition: 'filter 0.5s'
           }}
-        />
+        >
+          <div>
+            <div
+              style={{
+                fontSize: '0.8rem',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                opacity: 0.7,
+                marginBottom: '0.75rem'
+              }}
+            >
+              {t(`projects.items.${project.id}.name`) ? 'Live Project' : 'Demo'}
+            </div>
+            <div
+              style={{
+                fontSize: '1.6rem',
+                fontWeight: '900',
+                letterSpacing: '-0.04em'
+              }}
+            >
+              {t(`projects.items.${project.id}.name`)}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // On Desktop:
+    const isLoaded = loadedPreviews[project.id];
+
+    if (project.embed && isCenter && isLoaded) {
+      return (
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <iframe
+            src={project.embed}
+            title={t(`projects.items.${project.id}.name`)}
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              borderRadius: '26px',
+              transform: 'scale(1.01)',
+              transformOrigin: 'top center',
+              filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
+              transition: 'filter 0.5s'
+            }}
+          />
+          {/* Transparent touch/drag event blocker overlay */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 10,
+            cursor: isDragging.current ? 'grabbing' : 'grab',
+            backgroundColor: 'transparent'
+          }} />
+        </div>
       );
     }
 
@@ -451,12 +634,14 @@ const Projects = ({ theme = 'dark' }) => {
       );
     }
 
+    // Default or not loaded yet state (Desktop)
     return (
       <div
         style={{
           width: '100%',
           height: '100%',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           padding: '2rem',
@@ -464,13 +649,14 @@ const Projects = ({ theme = 'dark' }) => {
           color: colors.fallbackText,
           textAlign: 'center',
           filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-          transition: 'filter 0.5s'
+          transition: 'filter 0.5s',
+          position: 'relative'
         }}
       >
-        <div>
+        <div style={{ zIndex: 1 }}>
           <div
             style={{
-              fontSize: isMobile ? '0.8rem' : '0.9rem',
+              fontSize: '0.9rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               opacity: 0.7,
@@ -481,14 +667,52 @@ const Projects = ({ theme = 'dark' }) => {
           </div>
           <div
             style={{
-              fontSize: isMobile ? '1.6rem' : '2.4rem',
+              fontSize: '2.4rem',
               fontWeight: '900',
-              letterSpacing: '-0.04em'
+              letterSpacing: '-0.04em',
+              marginBottom: isCenter ? '1.5rem' : '0'
             }}
           >
             {t(`projects.items.${project.id}.name`)}
           </div>
         </div>
+
+        {/* Cargar vista interactiva button - ONLY for the active center slide */}
+        {isCenter && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setLoadedPreviews(prev => ({ ...prev, [project.id]: true }));
+            }}
+            style={{
+              zIndex: 2,
+              padding: '0.75rem 1.5rem',
+              borderRadius: '100px',
+              border: '1px solid rgba(0, 221, 235, 0.4)',
+              backgroundColor: 'rgba(91, 66, 243, 0.15)',
+              color: '#00DDEB',
+              fontWeight: '700',
+              fontSize: '0.85rem',
+              letterSpacing: '1px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 0 15px rgba(0, 221, 235, 0.1)',
+              backdropFilter: 'blur(10px)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(91, 66, 243, 0.35)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 221, 235, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(91, 66, 243, 0.15)';
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 221, 235, 0.1)';
+            }}
+          >
+            {t('projects.load_interactive')}
+          </button>
+        )}
       </div>
     );
   };

@@ -9,6 +9,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const HoverBox = ({ children, style }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -260,12 +261,12 @@ const Info = () => {
           duration: 0.8,
           scrollTrigger: {
             trigger: '.gsap-summary-box',
-            start: 'top 85%',
+            start: isMobile ? 'top 98%' : 'top 85%',
             toggleActions: 'play none none reverse'
           }
         }
       );
-
+ 
       // Experience title
       gsap.fromTo('.gsap-exp-title',
         { opacity: 0, y: 30, filter: 'blur(5px)' },
@@ -274,12 +275,12 @@ const Info = () => {
           duration: 0.8,
           scrollTrigger: {
             trigger: '.gsap-exp-title',
-            start: 'top 85%',
+            start: isMobile ? 'top 98%' : 'top 85%',
             toggleActions: 'play none none reverse'
           }
         }
       );
-
+ 
       // Experience cards
       gsap.fromTo('.gsap-exp-card',
         { opacity: 0, y: 40, scale: 0.96 },
@@ -289,12 +290,12 @@ const Info = () => {
           stagger: 0.15,
           scrollTrigger: {
             trigger: '.gsap-exp-card',
-            start: 'top 90%',
+            start: isMobile ? 'top 98%' : 'top 90%',
             toggleActions: 'play none none reverse'
           }
         }
       );
-
+ 
       // Tech stack title
       gsap.fromTo('.gsap-tech-title',
         { opacity: 0, y: 30, filter: 'blur(5px)' },
@@ -303,12 +304,12 @@ const Info = () => {
           duration: 0.8,
           scrollTrigger: {
             trigger: '.gsap-tech-title',
-            start: 'top 85%',
+            start: isMobile ? 'top 98%' : 'top 85%',
             toggleActions: 'play none none reverse'
           }
         }
       );
-
+ 
       // Skill Category Cards and inner skill icons staggered entry
       const categories = gsap.utils.toArray('.gsap-skill-card');
       categories.forEach((card) => {
@@ -319,12 +320,12 @@ const Info = () => {
             duration: 0.7,
             scrollTrigger: {
               trigger: card,
-              start: 'top 90%',
+              start: isMobile ? 'top 98%' : 'top 90%',
               toggleActions: 'play none none reverse'
             }
           }
         );
-
+ 
         const pills = card.querySelectorAll('.gsap-skill-pill');
         gsap.fromTo(pills,
           { opacity: 0, scale: 0.7, y: 15 },
@@ -334,13 +335,13 @@ const Info = () => {
             stagger: 0.05,
             scrollTrigger: {
               trigger: card,
-              start: 'top 85%',
+              start: isMobile ? 'top 98%' : 'top 85%',
               toggleActions: 'play none none reverse'
             }
           }
         );
       });
-
+ 
       // Education tags
       gsap.fromTo('.gsap-edu-tag',
         { opacity: 0, y: 30 },
@@ -350,15 +351,23 @@ const Info = () => {
           stagger: 0.15,
           scrollTrigger: {
             trigger: '.gsap-edu-tags',
-            start: 'top 90%',
+            start: isMobile ? 'top 98%' : 'top 90%',
             toggleActions: 'play none none reverse'
           }
         }
       );
     }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+ 
+    // Force a ScrollTrigger refresh after initial DOM paint to ensure accurate positions
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+ 
+    return () => {
+      ctx.revert();
+      clearTimeout(refreshTimer);
+    };
+  }, [isMobile]);
 
   const experiences = [
     {
