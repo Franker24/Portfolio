@@ -73,24 +73,28 @@ i18n
             }
           },
           projects: {
-            section_title: 'Featured',
-            section_subtitle: 'Projects',
-            drag_hint: '<- Swipe to explore ->',
+            section_title: 'Selected',
+            section_subtitle: 'Work',
+            description: 'A selection of products, systems and experiments I\'ve designed and engineered.',
+            projects_count: '06 PROJECTS / 2024—2026',
+            more_title: 'Other',
+            more_subtitle: 'Projects',
             github: 'Source',
             live: 'Live Demo',
             load_interactive: 'Load Interactive Preview',
             items: {
+              nexus: { name: 'NEXUS', subtitle: 'Autonomous Multi-Agent Operations Platform', desc: 'An autonomous platform that investigates production incidents, retrieves organizational context, evaluates remediation risks, and executes approved recovery tools with human-in-the-loop governance.' },
+              sentinel: { name: 'SENTINEL AI', subtitle: 'Enterprise AI Operations & Data Governance', desc: 'Enterprise data operations and incident response system powered by Gemini 2.5 Flash and DataHub metadata catalog. Visualizes upstream data flows and downstream business impacts with lineage graphs.' },
+              billora: { name: 'BILLORA', subtitle: 'The AI Financial Operating System', desc: 'A professional financial management suite to handle invoices, customer databases, and real-time payments, powered by server-side Gemini intelligence and rich visualizations.' },
+              astraia: { name: 'ASTRAIA', subtitle: 'Intelligent AI Assistant Platform', desc: 'A high-performance personal assistant interface built with Google Gemini, featuring fast server-side isolation, custom tools, and optimized Markdown chat rendering.' },
+              momentum: { name: 'MOMENTUM', subtitle: 'SaaS Gym & Fitness Product', desc: 'Premium fitness management SaaS featuring real-time class bookings, workout planning, maps integration, and a dual-persistence local-first caching layer synchronized with Firebase Firestore.' },
+              revrecover: { name: 'RevRecover AI', subtitle: 'Revenue Leakage & Churn Audit Engine', desc: 'B2B SaaS churn audit engine featuring forensic financial calculations, churn diagnosis, and automated API webhook recovery playbooks using structured JSON outputs.' },
+              ms: { name: 'Estudio MS', subtitle: 'Paid Commercial Client Project · Financial & Accounting', desc: 'Commercial production website and client portal developed for a professional accounting firm. Features clean corporate UI, interactive service showcase, client lead intake, and WhatsApp integration.' },
               securify: { name: 'Securify', desc: 'Secure authentication interface with a clean, modern UI.' },
               wisa: { name: 'Wisa', desc: 'SaaS platform showcasing a modern, high-performance user interface.' },
-              astraia: { name: 'AstraIA', desc: 'Intelligent AI-driven interface designed for advanced tech interactions.' },
-              watchweb: { name: 'WatchWeb', desc: 'Media streaming web application with a sleek and dynamic layout.' },
-              astra: { name: 'ASTRA', desc: 'AI-inspired landing experience with a polished futuristic interface and strong visual identity.' },
               nexcrypto: { name: 'NexCrypto', desc: 'Crypto-focused interface with a modern dashboard feel and live-market inspired visuals.' },
-              coffeeweb: { name: 'CoffeeWeb', desc: 'Coffee brand storefront concept with a warm visual direction and product-focused layout.' },
               kineticcourt: { name: 'Kinetic Court', desc: 'Sports-driven concept built with bold composition, motion, and a stronger editorial look.' },
-              construtech: { name: 'Constru-Tech', desc: 'Construction company landing page built to showcase services with a strong commercial presentation.' },
-              ms: { name: 'Estudio MS', desc: 'Accounting firm landing page with focus on clean UI and professional presence.' },
-              currency: { name: 'Currency Converter', desc: 'Real-time currency exchange app using external financial APIs.' }
+              watchweb: { name: 'WatchWeb', desc: 'Media streaming web application with a sleek and dynamic layout.' }
             }
           },
           footer: {
@@ -161,24 +165,27 @@ i18n
             }
           },
           projects: {
-            section_title: 'Proyectos',
-            section_subtitle: 'Destacados',
-            drag_hint: '<- Desliza para explorar ->',
-            github: 'Codigo',
+            section_title: 'Trabajo',
+            section_subtitle: 'Seleccionado',
+            description: 'Una selección de productos, sistemas y experimentos que he diseñado y desarrollado.',
+            projects_count: '06 PROYECTOS / 2024—2026',
+            more_title: 'Otros',
+            more_subtitle: 'Proyectos',
+            github: 'Código',
             live: 'Demo en vivo',
             load_interactive: 'Cargar vista interactiva',
             items: {
+              nexus: { name: 'NEXUS', subtitle: 'Plataforma Autónoma de Operaciones Multi-Agente', desc: 'Plataforma autónoma que investiga incidentes en producción, recupera contexto organizacional, evalúa riesgos de remediación y ejecuta herramientas de recuperación con aprobación humana.' },
+              sentinel: { name: 'SENTINEL AI', subtitle: 'Operaciones de IA Empresarial & Gobernanza de Datos', desc: 'Sistema de incidentes y operaciones de datos impulsado por Gemini 2.5 Flash y el catálogo DataHub. Visualiza dependencias de datos e impactos de negocio mediante grafos de linaje.' },
+              billora: { name: 'BILLORA', subtitle: 'Sistema Operativo Financiero con IA', desc: 'Suite profesional de gestión financiera para administrar facturas, clientes y pagos en tiempo real, potenciada por inteligencia de Gemini en el servidor y gráficos dinámicos.' },
+              momentum: { name: 'MOMENTUM', subtitle: 'Producto SaaS para Gimnasios y Fitness', desc: 'Software SaaS de gestión deportiva con reservas de clases, planificación de entrenamientos, mapas y capa de persistencia dual local-primero sincronizada con Firebase Firestore.' },
+              revrecover: { name: 'RevRecover AI', subtitle: 'Motor de Auditoría de Fugas de Ingresos y Churn', desc: 'Motor de auditoría de churn para B2B SaaS con cálculos de riesgo financiero forense, diagnóstico de deserción y automatización de webhooks de recuperación usando JSON estructurado.' },
+              ms: { name: 'Estudio MS', subtitle: 'Proyecto Cliente Pago Comercial · Estudio Contable', desc: 'Sitio web en producción comercial y portal de clientes desarrollado para estudio contable profesional. Incluye interfaz corporativa limpia, catálogo interactivo de servicios, captura de prospectos e integración con WhatsApp.' },
               securify: { name: 'Securify', desc: 'Interfaz de autenticación segura con un diseño limpio y moderno.' },
               wisa: { name: 'Wisa', desc: 'Plataforma SaaS que destaca por una interfaz de usuario moderna y de alto rendimiento.' },
-              astraia: { name: 'AstraIA', desc: 'Interfaz inteligente impulsada por IA diseñada para interacciones tecnológicas avanzadas.' },
-              watchweb: { name: 'WatchWeb', desc: 'Aplicación web de streaming multimedia con un diseño elegante y dinámico.' },
-              astra: { name: 'ASTRA', desc: 'Landing inspirada en AI con una interfaz futurista pulida y una identidad visual marcada.' },
               nexcrypto: { name: 'NexCrypto', desc: 'Interfaz orientada al mundo cripto con estilo de dashboard moderno y visuales inspirados en mercado en vivo.' },
-              coffeeweb: { name: 'CoffeeWeb', desc: 'Concepto de storefront para marca de cafe con una direccion visual calida y enfoque en producto.' },
               kineticcourt: { name: 'Kinetic Court', desc: 'Concepto ligado al deporte con composicion intensa, movimiento y una estetica mas editorial.' },
-              construtech: { name: 'Constru-Tech', desc: 'Landing page para empresa de construccion pensada para mostrar servicios con una presencia comercial fuerte.' },
-              ms: { name: 'Estudio MS', desc: 'Landing page para estudio contable con enfoque en una interfaz limpia y presencia profesional.' },
-              currency: { name: 'Conversor de Moneda', desc: 'Aplicacion de cotizacion en tiempo real utilizando APIs financieras externas.' }
+              watchweb: { name: 'WatchWeb', desc: 'Aplicación web de streaming multimedia con un diseño elegante y dinámico.' }
             }
           },
           footer: {

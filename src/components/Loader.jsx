@@ -171,7 +171,7 @@ const Loader = () => {
 const fullScreenContainer = {
   height: '100vh',
   width: '100vw',
-  backgroundColor: '#020617', // Match con tu App
+  backgroundColor: '#000000', // Match con tu App
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

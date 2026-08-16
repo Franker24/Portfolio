@@ -1,58 +1,382 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSpring, animated } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
 import { useInView } from 'react-intersection-observer';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaShieldAlt, FaBolt, FaChartLine, FaTrophy, FaCalculator, FaPlayCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 
 const themePalette = {
   dark: {
     sectionBg: '#000000',
     panelBg: '#050505',
-    previewShell: 'rgba(255, 255, 255, 0.03)',
+    previewShell: 'rgba(255, 255, 255, 0.02)',
     title: '#ffffff',
-    body: '#94a3b8',
-    hint: '#475569',
-    mutedDot: '#334155',
-    inactiveBorder: 'linear-gradient(144deg, #333, #111)',
-    shadow: '0 30px 60px -12px rgba(91, 66, 243, 0.3)',
-    liveBadgeBg: 'rgba(5, 5, 5, 0.78)',
-    liveBadgeBorder: '1px solid rgba(0,221,235,0.25)',
+    body: '#cbd5e1',
+    hint: '#94a3b8',
+    mutedDot: '#525252',
+    borderCol: 'rgba(255, 255, 255, 0.08)',
+    borderHover: 'rgba(59, 130, 246, 0.4)',
+    tagBg: 'rgba(255, 255, 255, 0.04)',
+    tagBorder: '1px solid rgba(255, 255, 255, 0.08)',
     linkColor: '#ffffff',
-    accentLink: '#5B42F3',
-    tagBg: 'rgba(91, 66, 243, 0.1)',
-    tagBorder: '1px solid rgba(0,221,235,0.2)',
-    infoBg: 'rgba(5, 5, 5, 0.88)',
-    fallbackBg: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 1))',
-    fallbackText: '#e2e8f0'
+    accentLink: '#3b82f6',
+    accentColor: '#3b82f6',
+    cardBg: 'rgba(255, 255, 255, 0.02)',
+    metaBg: 'rgba(255, 255, 255, 0.02)'
   },
   light: {
-    sectionBg: '#f1f5f9',
+    sectionBg: '#f8fafc',
     panelBg: '#ffffff',
-    previewShell: 'rgba(15, 23, 42, 0.04)',
+    previewShell: 'rgba(0, 0, 0, 0.02)',
     title: '#0f172a',
-    body: '#475569',
+    body: '#334155',
     hint: '#64748b',
-    mutedDot: '#cbd5e1',
-    inactiveBorder: 'linear-gradient(144deg, #cbd5e1, #e2e8f0)',
-    shadow: '0 30px 60px -18px rgba(37, 99, 235, 0.2)',
-    liveBadgeBg: 'rgba(255, 255, 255, 0.82)',
-    liveBadgeBorder: '1px solid rgba(37,99,235,0.15)',
+    mutedDot: '#9ca3af',
+    borderCol: 'rgba(0, 0, 0, 0.08)',
+    borderHover: 'rgba(59, 130, 246, 0.4)',
+    tagBg: 'rgba(0, 0, 0, 0.04)',
+    tagBorder: '1px solid rgba(0, 0, 0, 0.08)',
     linkColor: '#0f172a',
     accentLink: '#2563eb',
-    tagBg: 'rgba(37, 99, 235, 0.08)',
-    tagBorder: '1px solid rgba(37,99,235,0.18)',
-    infoBg: 'rgba(255, 255, 255, 0.92)',
-    fallbackBg: 'linear-gradient(135deg, rgba(226, 232, 240, 0.95), rgba(248, 250, 252, 1))',
-    fallbackText: '#0f172a'
+    accentColor: '#2563eb',
+    cardBg: '#ffffff',
+    metaBg: 'rgba(0, 0, 0, 0.02)'
   }
 };
 
-const PremiumThumbnail = ({ project, colors, isHovered, t, isMobile }) => {
-  const [imageError, setImageError] = useState(!project.image);
-  const [isLoaded, setIsLoaded] = useState(false);
+const featuredProjects = [
+  {
+    id: 'nexus',
+    tags: ['React 19', 'TypeScript', 'Node.js', 'Gemini 2.5', 'Multi-Agent', 'SSE'],
+    github: 'https://github.com/Franker24/Nexus',
+    demo: 'https://nexus-nine-bay.vercel.app',
+    embed: 'https://nexus-nine-bay.vercel.app',
+    hasArchitecture: true,
+    architecture: ['User', 'Mission Control', 'Agent Orchestrator', 'Specialized Agents', 'Tool Gateway'],
+    insideTheBuild: ['Autonomous Orchestration', 'Episodic Memory', 'Security Sandbox', 'SSE EventBus'],
 
-  if (project.embed && isLoaded) {
+  },
+  {
+    id: 'sentinel',
+    tags: ['React', 'TypeScript', 'React Flow', 'Gemini 2.5', 'DataHub Protocol'],
+    github: 'https://github.com/Franker24/SENTINEL-AI',
+    demo: 'https://sentinel-ai-steel.vercel.app',
+    embed: 'https://sentinel-ai-steel.vercel.app',
+    hasArchitecture: true,
+    architecture: ['Alert Stream', 'Lineage DAG Analyst', 'Diagnostic Swarm', 'SQL Remediation'],
+    insideTheBuild: ['DAG Lineage Visuals', 'Incident Classification', 'dbt Remediation Engine'],
+
+  },
+  {
+    id: 'billora',
+    tags: ['React 19', 'TypeScript', 'Base UI', 'Recharts 3', 'Gemini API'],
+    github: 'https://github.com/Franker24/Billora',
+    demo: 'https://billora-tau.vercel.app',
+    embed: 'https://billora-tau.vercel.app',
+    hasArchitecture: false,
+    insideTheBuild: ['Invoices Engine', 'Payments Management', 'Gemini Copilot Analytics'],
+
+  },
+  {
+    id: 'ms',
+    tags: ['React 19', 'TypeScript', 'Tailwind CSS', 'Client Portal', 'Commercial Product'],
+    github: 'https://github.com/Franker24/Estudio-ms',
+    demo: 'https://estudio-ms.vercel.app',
+    embed: 'https://estudio-ms.vercel.app',
+    hasArchitecture: false,
+    insideTheBuild: ['Paid Commercial Deployment', 'Interactive Services Showcase', 'Client Ingestion & WhatsApp Integration'],
+
+  },
+  {
+    id: 'momentum',
+    tags: ['React 19', 'Zustand', 'Firebase', 'Three.js', 'Google Maps'],
+    github: 'https://github.com/Franker24/Momentum',
+    demo: 'https://momentum-silk-six.vercel.app',
+    embed: 'https://momentum-silk-six.vercel.app',
+    hasArchitecture: false,
+    insideTheBuild: ['Offline Caching', 'Firestore Synchronization', 'Visual 3D Mockups'],
+
+  },
+  {
+    id: 'revrecover',
+    tags: ['React 19', 'TypeScript', 'Express', 'Gemini API', 'Stripe Webhooks'],
+    github: 'https://github.com/Franker24/RevRecover-AI',
+    demo: 'https://rev-recover-ai.vercel.app',
+    embed: 'https://rev-recover-ai.vercel.app',
+    hasArchitecture: false,
+    insideTheBuild: ['Forensic Churn Diagnostic', 'Dynamic Code Generator', 'Structured JSON Schemas'],
+
+  }
+];
+
+const secondaryExperiments = [
+  {
+    id: 'securify',
+    tags: ['TypeScript', 'Security', 'Auth UI'],
+    github: 'https://github.com/Franker24/Securify',
+    demo: 'https://securify-two.vercel.app',
+    accent: '#ef4444',
+    gradient: 'linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(153, 27, 27, 0.4) 100%)',
+    icon: FaShieldAlt,
+    category: 'SECURITY'
+  },
+  {
+    id: 'wisa',
+    tags: ['TypeScript', 'SaaS', 'Modern UI'],
+    github: 'https://github.com/Franker24/Wisa',
+    demo: 'https://wisa-neon.vercel.app',
+    accent: '#8b5cf6',
+    gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(91, 33, 182, 0.4) 100%)',
+    icon: FaBolt,
+    category: 'SAAS PLATFORM'
+  },
+  {
+    id: 'nexcrypto',
+    tags: ['React', 'Crypto', 'Dashboard UI'],
+    github: 'https://github.com/Franker24/NexCrypto',
+    demo: 'https://nex-crypto.vercel.app',
+    accent: '#3b82f6',
+    gradient: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(30, 64, 175, 0.4) 100%)',
+    icon: FaChartLine,
+    category: 'FINTECH & WEB3'
+  },
+  {
+    id: 'kineticcourt',
+    tags: ['TypeScript', 'Sports UI', 'Bold Visuals'],
+    github: 'https://github.com/Franker24/KINETIC-COURT',
+    demo: 'https://kinetic-court.vercel.app',
+    accent: '#f97316',
+    gradient: 'linear-gradient(135deg, rgba(249, 115, 22, 0.25) 0%, rgba(154, 52, 18, 0.4) 100%)',
+    icon: FaTrophy,
+    category: 'SPORTS & ANALYTICS'
+  },
+  {
+    id: 'watchweb',
+    tags: ['JavaScript', 'Media', 'Streaming UI'],
+    github: 'https://github.com/Franker24/WatchWeb',
+    demo: 'https://watch-web-gules.vercel.app',
+    accent: '#06b6d4',
+    gradient: 'linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(30, 58, 138, 0.4) 100%)',
+    icon: FaPlayCircle,
+    category: 'STREAMING MEDIA'
+  }
+];
+
+// Helper to render high-fidelity custom visual fallbacks for each project
+const ProjectMockupUI = ({ projectId, isDark }) => {
+  const textColor = isDark ? '#ffffff' : '#0f172a';
+  const labelColor = isDark ? '#64748b' : '#64748b';
+  const elementBg = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(15, 23, 42, 0.04)';
+  const borderStyle = `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`;
+
+  switch (projectId) {
+    case 'nexus':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: borderStyle, paddingBottom: '12px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: '800', color: '#3b82f6', letterSpacing: '1px' }}>[NEXUS CORE ACTIVE]</span>
+            <span style={{ fontSize: '0.65rem', color: '#10b981' }}>● SYSTEMS ONLINE</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+            {['Orchestrator', 'Diagnostic', 'Research'].map(agent => (
+              <div key={agent} style={{ backgroundColor: elementBg, border: borderStyle, borderRadius: '8px', padding: '12px', textAlign: 'center' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: textColor }}>{agent}</div>
+                <div style={{ fontSize: '0.55rem', color: '#10b981', marginTop: '4px' }}>Agent Idle</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ flexGrow: 1, backgroundColor: 'rgba(0, 0, 0, 0.2)', border: borderStyle, borderRadius: '12px', padding: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ fontSize: '0.6rem', color: labelColor, fontFamily: 'monospace' }}>&gt; Initializing diagnostics swarm...</div>
+            <div style={{ fontSize: '0.6rem', color: labelColor, fontFamily: 'monospace' }}>&gt; Incident severity evaluation: LOW</div>
+            <div style={{ fontSize: '0.6rem', color: '#3b82f6', fontFamily: 'monospace' }}>&gt; Memory recall from episodic log #8321...</div>
+            <div style={{ fontSize: '0.6rem', color: '#10b981', fontFamily: 'monospace' }}>&gt; Resolution tools generated. Pending approval.</div>
+            <div style={{ position: 'absolute', bottom: '12px', right: '12px', padding: '4px 10px', backgroundColor: '#3b82f6', borderRadius: '4px', fontSize: '0.55rem', fontWeight: '800', color: '#fff' }}>Awaiting Governance Approval</div>
+          </div>
+        </div>
+      );
+
+    case 'sentinel':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#10b981' }}>DATA GOVERNANCE LINEAGE</span>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ef4444' }}></span>
+              <span style={{ fontSize: '0.55rem', color: '#ef4444', fontWeight: '700' }}>SLA RISK HIGH</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexGrow: 1, position: 'relative', padding: '0 20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', zIndex: 2 }}>
+              <div style={{ padding: '8px 12px', backgroundColor: elementBg, border: borderStyle, borderRadius: '6px', fontSize: '0.65rem', fontWeight: '700', color: textColor }}>Ingest DB</div>
+              <div style={{ padding: '8px 12px', backgroundColor: elementBg, border: borderStyle, borderRadius: '6px', fontSize: '0.65rem', fontWeight: '700', color: textColor }}>Kafka Stream</div>
+            </div>
+
+            <div style={{ zIndex: 2, padding: '12px 16px', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', borderRadius: '8px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#10b981' }}>DAG ANALYST</div>
+              <div style={{ fontSize: '0.55rem', color: labelColor, marginTop: '2px' }}>Gemini Core</div>
+            </div>
+
+            <div style={{ zIndex: 2, padding: '8px 12px', backgroundColor: elementBg, border: borderStyle, borderRadius: '6px', fontSize: '0.65rem', fontWeight: '700', color: textColor }}>Hotfix Patch</div>
+
+            {/* Simulated graph lines */}
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}>
+              <line x1="20%" y1="30%" x2="50%" y2="50%" stroke={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} strokeWidth="1.5" strokeDasharray="4" />
+              <line x1="20%" y1="70%" x2="50%" y2="50%" stroke={isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} strokeWidth="1.5" strokeDasharray="4" />
+              <line x1="50%" y1="50%" x2="80%" y2="50%" stroke="#10b981" strokeWidth="2" />
+            </svg>
+          </div>
+        </div>
+      );
+
+    case 'billora':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#8b5cf6' }}>BILLORA AI FINANCIALS</span>
+            <span style={{ fontSize: '0.6rem', color: labelColor }}>Aug 2026</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', flexGrow: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyItems: 'stretch', gap: '10px' }}>
+              <div style={{ flexGrow: 1, backgroundColor: elementBg, border: borderStyle, borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: '0.55rem', color: labelColor }}>Monthly Revenue</span>
+                <span style={{ fontSize: '1.2rem', fontWeight: '800', color: textColor, margin: '2px 0' }}>$12,450.80</span>
+                <span style={{ fontSize: '0.5rem', color: '#10b981' }}>↑ +14.2% from last month</span>
+              </div>
+              <div style={{ flexGrow: 1, backgroundColor: elementBg, border: borderStyle, borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: '0.55rem', color: labelColor }}>Outstanding</span>
+                <span style={{ fontSize: '1.2rem', fontWeight: '800', color: '#8b5cf6', margin: '2px 0' }}>$2,105.00</span>
+              </div>
+            </div>
+
+            {/* Custom SVG line chart */}
+            <div style={{ backgroundColor: 'rgba(0,0,0,0.1)', border: borderStyle, borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '0.55rem', color: labelColor }}>Revenue Growth</span>
+              <div style={{ flexGrow: 1, position: 'relative', marginTop: '10px' }}>
+                <svg width="100%" height="100%" viewBox="0 0 100 50" preserveAspectRatio="none">
+                  <path d="M0,45 Q20,30 40,35 T80,15 T100,5" fill="none" stroke="#8b5cf6" strokeWidth="2.5" />
+                  <path d="M0,45 Q20,30 40,35 T80,15 T100,5 L100,50 L0,50 Z" fill="url(#purpleGrad)" opacity="0.15" />
+                  <defs>
+                    <linearGradient id="purpleGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.45rem', color: labelColor, marginTop: '4px' }}>
+                <span>Q1</span>
+                <span>Q2</span>
+                <span>Q3</span>
+                <span>Q4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'ms':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#10b981' }}>ESTUDIO MS FINANCIAL SUITE</span>
+            <span style={{ fontSize: '0.55rem', color: '#10b981', fontWeight: '700', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '100px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>● CLIENT PAID PRODUCT</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '6px', padding: '10px' }}>
+              <div style={{ fontSize: '0.5rem', color: labelColor }}>SERVICES ACTIVE</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#10b981' }}>Tax & Accounting</div>
+            </div>
+            <div style={{ backgroundColor: elementBg, border: borderStyle, borderRadius: '6px', padding: '10px' }}>
+              <div style={{ fontSize: '0.5rem', color: labelColor }}>PRODUCTION STATUS</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: '800', color: textColor }}>LIVE ONLINE</div>
+            </div>
+          </div>
+
+          <div style={{ flexGrow: 1, backgroundColor: 'rgba(0,0,0,0.15)', border: borderStyle, borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <span style={{ fontSize: '0.55rem', color: '#10b981', fontWeight: '700', fontFamily: 'monospace' }}>CLIENT ENGAGEMENT PIPELINE</span>
+            <div style={{ fontSize: '0.55rem', color: labelColor, fontFamily: 'monospace', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+              &gt; Direct Whatsapp API Integration & Lead Routing
+            </div>
+            <div style={{ fontSize: '0.55rem', color: '#10b981', fontFamily: 'monospace' }}>
+              &gt; Custom corporate branding & responsive UI architecture
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'momentum':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#ec4899' }}>MOMENTUM FITNESS SAAS</span>
+            <span style={{ fontSize: '0.55rem', color: '#10b981' }}>FIRESTORE SYNC ACTIVE</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px', flexGrow: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <span style={{ fontSize: '0.55rem', color: labelColor }}>Active Training Programs</span>
+              {['Hypertrophy Pro v2', 'Aerobic Threshold', 'Functional HIIT'].map((program, idx) => (
+                <div key={program} style={{ display: 'flex', justifyItems: 'center', justifyContent: 'space-between', backgroundColor: elementBg, border: borderStyle, borderRadius: '6px', padding: '8px 12px' }}>
+                  <span style={{ fontSize: '0.6rem', color: textColor, fontWeight: '700' }}>{program}</span>
+                  <span style={{ fontSize: '0.5rem', color: idx === 0 ? '#ec4899' : labelColor }}>{idx === 0 ? 'Active' : 'Offline'}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ backgroundColor: elementBg, border: borderStyle, borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.5rem', color: labelColor }}>BOOKING RATE</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#ec4899' }}>94.2%</div>
+              <div style={{ fontSize: '0.45rem', color: '#10b981' }}>+8% vs last week</div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'revrecover':
+      return (
+        <div style={{ padding: '24px', height: '100%', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#06b6d4' }}>REVRECOVER RISK MONITOR</span>
+            <span style={{ fontSize: '0.55rem', color: '#ef4444' }}>ALERT: LEAKAGE DETECTED</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '6px', padding: '10px' }}>
+              <div style={{ fontSize: '0.5rem', color: labelColor }}>MRR AT CHURN RISK</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#ef4444' }}>$3,450.00</div>
+            </div>
+            <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '6px', padding: '10px' }}>
+              <div style={{ fontSize: '0.5rem', color: labelColor }}>RECOVERED CAPITAL</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#10b981' }}>$2,820.00</div>
+            </div>
+          </div>
+
+          <div style={{ flexGrow: 1, backgroundColor: 'rgba(0,0,0,0.15)', border: borderStyle, borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ fontSize: '0.55rem', color: '#06b6d4', fontWeight: '700', fontFamily: 'monospace' }}>STRIPE AUTOPLAYBOOK WEBHOOK</span>
+            <div style={{ fontSize: '0.55rem', color: labelColor, fontFamily: 'monospace', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+              &gt; stripe.webhooks.constructEvent(payload, sig)
+            </div>
+            <div style={{ fontSize: '0.55rem', color: '#10b981', fontFamily: 'monospace' }}>
+              &gt; Action: Trigger recovery mail sequence [SENT]
+            </div>
+          </div>
+        </div>
+      );
+
+    default:
+      return null;
+  }
+};
+
+const ProjectPreview = ({ project, colors, isHovered, t, isMobile, onInteractiveLoad, isLoaded }) => {
+  const isDark = colors.sectionBg === '#000000';
+
+  if (project.embed && isLoaded && !isMobile) {
     return (
       <div style={{ width: '100%', height: '100%', position: 'relative' }}>
         <iframe
@@ -63,18 +387,16 @@ const PremiumThumbnail = ({ project, colors, isHovered, t, isMobile }) => {
             width: '100%',
             height: '100%',
             border: 'none',
-            pointerEvents: 'none',
-            filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
-            transition: 'all 0.5s ease',
-            transform: isHovered ? 'scale(1.02)' : 'scale(1)'
+            pointerEvents: 'auto',
+            transition: 'all 0.5s ease'
           }}
         />
-        {/* Transparent touch event blocker overlay to allow scrolling */}
+        {/* Blocker overlay during scrolling on hover */}
         <div style={{
           position: 'absolute',
           inset: 0,
-          zIndex: 10,
-          cursor: 'grab',
+          zIndex: 1,
+          pointerEvents: 'none',
           backgroundColor: 'transparent'
         }} />
       </div>
@@ -87,314 +409,435 @@ const PremiumThumbnail = ({ project, colors, isHovered, t, isMobile }) => {
       height: '100%',
       position: 'relative',
       overflow: 'hidden',
-      background: imageError 
-        ? 'linear-gradient(135deg, rgba(91, 66, 243, 0.15) 0%, rgba(0, 221, 235, 0.05) 100%)' 
-        : 'transparent',
+      background: colors.cardBg,
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'all 0.5s ease'
+      flexDirection: 'column',
+      justifyContent: 'stretch',
+      transition: 'background 0.5s ease, all 0.5s ease'
     }}>
-      {!imageError && (
-        <img 
-          src={project.image} 
-          alt={project.id} 
-          onError={() => setImageError(true)}
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover', 
-            position: 'absolute',
-            inset: 0,
-            zIndex: 1,
-            transition: 'transform 0.5s ease', 
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-            filter: isHovered ? 'grayscale(0%)' : 'grayscale(100%)',
-          }} 
-        />
-      )}
-      {imageError && (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '1rem',
-          textAlign: 'center',
-          zIndex: 2
-        }}>
-          <span style={{
-            fontSize: '0.65rem',
-            fontWeight: '800',
-            letterSpacing: '3px',
-            color: '#00DDEB',
-            textTransform: 'uppercase',
-            opacity: 0.8
-          }}>
-            {t(`projects.items.${project.id}.name`) ? 'Project' : 'Demo'}
-          </span>
-          <span style={{
-            fontSize: '1.25rem',
-            fontWeight: '900',
-            color: colors.title,
-            letterSpacing: '-0.5px'
-          }}>
-            {t(`projects.items.${project.id}.name`) || project.id}
-          </span>
-        </div>
-      )}
+      {/* Visual Workspace Content */}
+      <div style={{ flexGrow: 1, position: 'relative' }}>
+        <ProjectMockupUI projectId={project.id} isDark={isDark} />
+      </div>
 
-      {/* Button to load interactive preview - visible on hover (desktop) or always (mobile) */}
-      {project.embed && (
+      {/* Demand Loader Button (Desktop Only) */}
+      {!isMobile && project.embed && (
         <div style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: isHovered ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.2)',
+          backgroundColor: isHovered ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 5,
-          opacity: isHovered || isMobile ? 1 : 0,
-          transition: 'all 0.3s ease',
-          pointerEvents: isHovered || isMobile ? 'auto' : 'none'
+          opacity: isHovered ? 1 : 0,
+          transition: 'all 0.3s ease'
         }}>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsLoaded(true);
-            }}
+            onClick={onInteractiveLoad}
             style={{
-              padding: '0.6rem 1.2rem',
+              padding: '0.7rem 1.4rem',
               borderRadius: '100px',
-              border: '1px solid rgba(0, 221, 235, 0.5)',
-              backgroundColor: 'rgba(91, 66, 243, 0.85)',
-              color: '#00DDEB',
+              border: `1px solid ${colors.accentLink}`,
+              backgroundColor: 'rgba(0,0,0,0.85)',
+              color: '#ffffff',
               fontWeight: '700',
-              fontSize: '0.75rem',
+              fontSize: '0.8rem',
               letterSpacing: '0.5px',
               cursor: 'pointer',
-              boxShadow: '0 0 15px rgba(0, 221, 235, 0.25)',
-              backdropFilter: 'blur(5px)',
+              boxShadow: `0 0 20px ${colors.accentLink}44`,
+              backdropFilter: 'blur(8px)',
               transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 221, 235, 0.5)';
+              e.currentTarget.style.backgroundColor = project.accentColor;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 221, 235, 0.25)';
+              e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.85)';
             }}
           >
             {t('projects.load_interactive')}
           </button>
         </div>
       )}
-
-      {/* Visual neon outline inside the card */}
-      <div style={{
-        position: 'absolute',
-        inset: '10px',
-        border: '1px solid rgba(0, 221, 235, 0.15)',
-        borderRadius: '12px',
-        pointerEvents: 'none',
-        zIndex: 2,
-        transition: 'border-color 0.3s ease',
-        borderColor: isHovered ? 'rgba(0, 221, 235, 0.4)' : 'rgba(0, 221, 235, 0.15)'
-      }} />
     </div>
   );
 };
 
-const TimelineCard = ({ project, index, isMobile, colors, t }) => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
+const ArchitectureFlow = ({ flow }) => {
+  return (
+    <div style={{ margin: '1.2rem 0', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+      {flow.map((step, idx) => (
+        <React.Fragment key={step}>
+          <div style={{
+            fontSize: '0.68rem',
+            fontFamily: 'monospace',
+            backgroundColor: 'rgba(255, 255, 255, 0.02)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            padding: '3px 8px',
+            borderRadius: '4px',
+            color: '#a1a1aa'
+          }}>
+            {step}
+          </div>
+          {idx < flow.length - 1 && (
+            <span style={{ fontSize: '0.65rem', color: '#52525b', fontWeight: 'bold' }}>→</span>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
+
+const InsideTheBuild = ({ list }) => {
+  return (
+    <div style={{ margin: '1rem 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <span style={{ fontSize: '0.65rem', fontWeight: '800', letterSpacing: '1.5px', color: '#52525b', textTransform: 'uppercase' }}>
+        INSIDE THE BUILD
+      </span>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
+        {list.map(item => (
+          <span key={item} style={{ fontSize: '0.7rem', color: '#a1a1aa' }}>
+            ■ {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const FeaturedProject = ({ project, index, isMobile, colors, t }) => {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const isLeft = index % 2 === 0;
 
   const animProps = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0px)' : 'translateY(50px)',
-    config: { tension: 120, friction: 20 },
-    delay: 100
+    transform: inView ? 'translateY(0px)' : 'translateY(80px)',
+    config: { tension: 120, friction: 22 }
   });
 
-  const hoverAnim = useSpring({
-    transform: isHovered ? 'translateY(-8px)' : 'translateY(0px)',
-    boxShadow: isHovered ? `0 25px 50px -12px rgba(91, 66, 243, 0.25)` : `0 10px 30px -10px rgba(0,0,0,0.1)`,
-    config: { tension: 300, friction: 20 }
+  const rowStyle = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : (isLeft ? 'row' : 'row-reverse'),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: isMobile ? '2.5rem' : '4rem',
+    width: '100%',
+    maxWidth: '1200px',
+    margin: isMobile ? '4rem auto' : '10rem auto',
+    boxSizing: 'border-box'
+  };
+
+  const textColStyle = {
+    flex: '1',
+    width: '100%',
+    maxWidth: isMobile ? '100%' : '440px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    textAlign: 'left'
+  };
+
+  const previewColStyle = {
+    flex: '1.6',
+    width: '100%',
+    height: isMobile ? '280px' : '480px',
+    borderRadius: '24px',
+    border: `1px solid ${colors.borderCol}`,
+    overflow: 'hidden',
+    position: 'relative',
+    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+    transform: isHovered ? 'translateY(-6px)' : 'translateY(0px)',
+    boxShadow: isHovered ? `0 25px 60px -10px ${colors.accentLink}33` : 'none'
+  };
+
+  return (
+    <animated.div ref={ref} style={{ ...animProps, width: '100%', padding: '0 1rem' }}>
+      <div style={rowStyle}>
+
+        {/* INFO COLUMN */}
+        <div style={textColStyle}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '0.8rem' }}>
+            <span style={{ fontSize: '1rem', fontWeight: '800', color: colors.accentLink, fontFamily: 'monospace' }}>
+              0{index + 1}
+            </span>
+            <h4 style={{ fontSize: isMobile ? '1.8rem' : '2.4rem', fontWeight: '900', color: colors.title, margin: 0, letterSpacing: '-1px' }}>
+              {t(`projects.items.${project.id}.name`)}
+            </h4>
+          </div>
+
+          <p style={{ fontSize: '0.92rem', color: colors.accentLink, fontWeight: '700', marginBottom: '1.2rem', letterSpacing: '-0.2px' }}>
+            {t(`projects.items.${project.id}.subtitle`)}
+          </p>
+
+          <p style={{ color: colors.body, fontSize: '0.98rem', lineHeight: '1.6', marginBottom: '1rem', fontWeight: '400' }}>
+            {t(`projects.items.${project.id}.desc`)}
+          </p>
+
+          {/* Optional Architecture diagrams */}
+          {project.hasArchitecture && (
+            <ArchitectureFlow flow={project.architecture} />
+          )}
+
+          {/* Optional Inside the Build details */}
+          {project.insideTheBuild && (
+            <InsideTheBuild list={project.insideTheBuild} />
+          )}
+
+          {/* Tech badges */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '2rem' }}>
+            {project.tags.map(tag => (
+              <span key={tag} style={{
+                backgroundColor: colors.tagBg,
+                color: colors.title,
+                border: colors.tagBorder,
+                padding: '4px 10px',
+                borderRadius: '6px',
+                fontSize: '0.72rem',
+                fontWeight: '700'
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Links */}
+          <div style={{ display: 'flex', gap: '1.5rem', borderTop: `1px solid ${colors.borderCol}`, paddingTop: '1.5rem', width: '100%' }}>
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: colors.accentLink, fontSize: '0.85rem', fontWeight: '800', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              {t('projects.live')} <FaExternalLinkAlt size={12} />
+            </a>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: colors.linkColor, fontSize: '0.85rem', fontWeight: '800', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              {t('projects.github')} <FaGithub size={14} />
+            </a>
+          </div>
+        </div>
+
+        {/* PREVIEW BROWSER COLUMN */}
+        <div
+          style={previewColStyle}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Simulated Browser Header */}
+          <div style={{
+            height: '32px',
+            backgroundColor: colors.metaBg,
+            borderBottom: `1px solid ${colors.borderCol}`,
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 12px',
+            gap: '8px'
+          }}>
+            {/* Dots */}
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ff5f56' }}></span>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></span>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#27c93f' }}></span>
+            </div>
+            {/* Mock address bar */}
+            <div style={{
+              flexGrow: 1,
+              height: '18px',
+              backgroundColor: colors.sectionBg,
+              borderRadius: '4px',
+              fontSize: '0.55rem',
+              color: colors.hint,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'monospace',
+              border: `1px solid ${colors.borderCol}`
+            }}>
+              {project.demo.replace('https://', '')}
+            </div>
+          </div>
+
+          {/* Viewport content */}
+          <div style={{ height: 'calc(100% - 32px)', width: '100%' }}>
+            <ProjectPreview
+              project={project}
+              colors={colors}
+              isHovered={isHovered}
+              t={t}
+              isMobile={isMobile}
+              onInteractiveLoad={() => setIsLoaded(true)}
+              isLoaded={isLoaded}
+            />
+          </div>
+        </div>
+
+      </div>
+    </animated.div>
+  );
+};
+
+const MoreExperiments = ({ colors, t, isMobile, theme }) => {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const isDark = theme === 'dark';
+
+  const gridAnim = useSpring({
+    opacity: inView ? 1 : 0,
+    transform: inView ? 'translateY(0px)' : 'translateY(60px)',
+    config: { tension: 100, friction: 22 }
   });
 
   return (
-    <div ref={ref} style={{
-      display: 'flex',
-      justifyContent: 'flex-start',
-      width: '100%',
-      paddingLeft: isMobile ? '50px' : '0px',
-      marginBottom: isMobile ? '4rem' : '0px',
-      position: 'relative',
-      height: '100%',
-      boxSizing: 'border-box'
-    }}>
-      {/* Mobile Timeline Node Dot centered on vertical straight track */}
-      {isMobile && (
-        <animated.div style={{
-          position: 'absolute',
-          left: '25px',
-          top: '50px',
-          transform: 'translateX(-50%)',
-          width: '16px',
-          height: '16px',
-          borderRadius: '50%',
-          backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
-          border: `3px solid ${colors.sectionBg}`,
-          boxShadow: isHovered ? '0 0 20px rgba(0, 221, 235, 0.6)' : '0 0 15px rgba(91, 66, 243, 0.5)',
-          zIndex: 2,
-          transition: 'all 0.3s ease'
-        }} />
-      )}
+    <div style={{ marginTop: isMobile ? '6rem' : '10rem', width: '100%', maxWidth: '1200px', margin: `${isMobile ? '6rem' : '10rem'} auto 0`, padding: '0 1rem' }}>
+      <h3 style={{
+        fontSize: isMobile ? '2rem' : '3.2rem',
+        fontWeight: '900',
+        textAlign: 'center',
+        marginBottom: '3.5rem',
+        letterSpacing: '-1.5px',
+        color: colors.title
+      }}>
+        {t('projects.more_title')} <span style={{
+          background: 'linear-gradient(135deg, #00DDEB, #5B42F3, #AF40FF)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          filter: 'drop-shadow(0 0 10px rgba(91, 66, 243, 0.45))'
+        }}>{t('projects.more_subtitle')}</span>
+      </h3>
 
-      {/* Desktop Timeline horizontal connector line and dot */}
-      {!isMobile && (
-        <>
-          {/* Connector line */}
-          <div style={{
-            position: 'absolute',
-            [isLeft ? 'right' : 'left']: '-60px',
-            top: '120px',
-            width: '60px',
-            height: '2px',
-            background: isHovered 
-              ? (isLeft ? 'linear-gradient(90deg, #5B42F3, #00DDEB)' : 'linear-gradient(90deg, #00DDEB, #5B42F3)')
-              : 'rgba(255, 255, 255, 0.1)',
-            zIndex: 1,
-            transition: 'all 0.3s ease',
-            boxShadow: isHovered ? '0 0 10px rgba(0, 221, 235, 0.5)' : 'none'
-          }} />
-          {/* Connector Dot */}
-          <animated.div style={{
-            position: 'absolute',
-            left: isLeft ? 'auto' : '-60px',
-            right: isLeft ? '-60px' : 'auto',
-            top: '120px',
-            transform: isLeft ? 'translate(50%, -50%)' : 'translate(-50%, -50%)',
-            width: '16px',
-            height: '16px',
-            borderRadius: '50%',
-            backgroundColor: isHovered ? '#00DDEB' : '#5B42F3',
-            border: `3px solid ${colors.sectionBg}`,
-            boxShadow: isHovered ? '0 0 15px rgba(0, 221, 235, 0.8)' : '0 0 8px rgba(91, 66, 243, 0.4)',
-            zIndex: 2,
-            transition: 'all 0.3s ease'
-          }} />
-        </>
-      )}
-
-      <animated.div 
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        style={{
-          ...animProps,
-          ...hoverAnim,
-          width: '100%',
-          padding: '1px',
-          borderRadius: '32px',
-          background: isHovered ? 'linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)' : colors.inactiveBorder,
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <div style={{
-          backgroundColor: colors.panelBg,
-          borderRadius: '31px',
-          padding: '20px',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-          backdropFilter: 'blur(10px)',
-          alignItems: 'stretch',
-          flexGrow: 1
-        }}>
-          <div style={{ 
-            width: '100%', 
-            height: isMobile ? '180px' : '240px', 
-            borderRadius: '20px', 
-            overflow: 'hidden', 
-            backgroundColor: colors.previewShell, 
-            position: 'relative',
-            flexShrink: 0
-          }}>
-            <PremiumThumbnail 
-              project={project} 
-              colors={colors} 
-              isHovered={isHovered} 
-              t={t} 
-              isMobile={isMobile}
-            />
-
-            {project.embed && (
+      <motion.div ref={ref} style={{
+        ...gridAnim,
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+        gap: '24px',
+        width: '100%'
+      }}>
+        {secondaryExperiments.map(proj => {
+          const IconComp = proj.icon;
+          return (
+            <motion.div
+              key={proj.id}
+              style={{
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : colors.cardBg,
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : colors.borderCol}`,
+                borderRadius: '20px',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                backdropFilter: 'blur(10px)',
+                position: 'relative'
+              }}
+              whileHover={{
+                y: -8,
+                borderColor: proj.accent,
+                boxShadow: `0 14px 35px -5px ${proj.accent}35`
+              }}
+            >
+              {/* Vibrant Banner Preview */}
               <div style={{
-                position: 'absolute',
-                top: '12px',
-                right: '12px',
-                backgroundColor: colors.liveBadgeBg,
-                color: '#00DDEB',
-                border: colors.liveBadgeBorder,
-                borderRadius: '999px',
-                padding: '4px 10px',
-                fontSize: '0.65rem',
-                fontWeight: '800',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                zIndex: 2,
-                backdropFilter: 'blur(8px)',
-                opacity: isHovered ? 1 : 0.6,
-                transition: 'opacity 0.3s ease'
+                height: '130px',
+                background: proj.gradient,
+                borderBottom: `1px solid ${proj.accent}33`,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                padding: '1.1rem',
+                position: 'relative',
+                overflow: 'hidden'
               }}>
-                Live
-              </div>
-            )}
-          </div>
+                {/* Background glow circle */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-20px',
+                  right: '-20px',
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '50%',
+                  backgroundColor: proj.accent,
+                  opacity: 0.25,
+                  filter: 'blur(20px)'
+                }} />
 
-          <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '20px', padding: isMobile ? '1.2rem' : '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div>
-              <h4 style={{ fontSize: isMobile ? '1.4rem' : '1.8rem', fontWeight: '900', color: colors.title, marginBottom: '0.8rem', letterSpacing: '-0.5px' }}>{t(`projects.items.${project.id}.name`)}</h4>
-              <p style={{ color: colors.body, fontSize: isMobile ? '0.85rem' : '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>{t(`projects.items.${project.id}.desc`)}</p>
-            </div>
-            
-            <div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '1.5rem' }}>
-                {project.tags.map(tag => (
-                  <span key={tag} style={{ backgroundColor: colors.tagBg, color: '#00DDEB', border: colors.tagBorder, padding: '6px 12px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: '800' }}>
-                    {tag}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1 }}>
+                  <span style={{
+                    fontSize: '0.6rem',
+                    fontWeight: '800',
+                    letterSpacing: '1.5px',
+                    color: proj.accent,
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    padding: '3px 9px',
+                    borderRadius: '100px',
+                    border: `1px solid ${proj.accent}44`
+                  }}>
+                    {proj.category}
                   </span>
-                ))}
+                  <IconComp style={{ color: proj.accent, fontSize: '1.3rem', filter: `drop-shadow(0 0 8px ${proj.accent})` }} />
+                </div>
+
+                <div style={{ zIndex: 1, marginTop: 'auto' }}>
+                  <span style={{ fontSize: '1.15rem', fontWeight: '900', color: '#ffffff', letterSpacing: '-0.5px' }}>
+                    {t(`projects.items.${proj.id}.name`)}
+                  </span>
+                </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '1.5rem' }}>
-                <a href={project.github} target="_blank" rel="noreferrer" style={{ color: colors.linkColor, fontSize: '0.85rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-                  <FaGithub size={18} /> {t('projects.github')}
-                </a>
-                <a href={project.demo} target="_blank" rel="noreferrer" style={{ color: colors.accentLink, fontSize: '0.85rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-                  <FaExternalLinkAlt size={16} /> {t('projects.live')}
-                </a>
+              {/* Details */}
+              <div style={{ padding: '1.4rem', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                <div>
+                  <p style={{ fontSize: '0.85rem', color: colors.body, lineHeight: '1.6', marginBottom: '1.25rem' }}>
+                    {t(`projects.items.${proj.id}.desc`)}
+                  </p>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.2rem' }}>
+                    {proj.tags.map(tag => (
+                      <span key={tag} style={{
+                        fontSize: '0.68rem',
+                        fontWeight: '700',
+                        backgroundColor: `${proj.accent}1a`,
+                        color: isDark ? '#ffffff' : colors.title,
+                        border: `1px solid ${proj.accent}33`,
+                        padding: '3px 10px',
+                        borderRadius: '6px'
+                      }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '1.2rem', borderTop: `1px solid ${colors.borderCol}`, paddingTop: '0.9rem' }}>
+                    <a href={proj.demo} target="_blank" rel="noreferrer" style={{ fontSize: '0.78rem', fontWeight: '800', color: proj.accent, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      {t('projects.live', 'Demo')} <FaExternalLinkAlt size={10} />
+                    </a>
+                    <a href={proj.github} target="_blank" rel="noreferrer" style={{ fontSize: '0.78rem', fontWeight: '800', color: colors.linkColor, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      {t('projects.github', 'Code')} <FaGithub size={12} />
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </animated.div>
+            </motion.div>
+          );
+        })}
+      </motion.div>
     </div>
   );
 };
 
 const Projects = ({ theme = 'dark' }) => {
   const { t } = useTranslation();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [loadedPreviews, setLoadedPreviews] = useState({});
-  const isDragging = useRef(false);
   const colors = themePalette[theme] || themePalette.dark;
 
   useEffect(() => {
@@ -403,668 +846,88 @@ const Projects = ({ theme = 'dark' }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { ref: sectionRef, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
-
-  const revealAnim = useSpring({
-    opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0px)' : 'translateY(80px)',
-    config: { mass: 1, tension: 120, friction: 30 }
-  });
-
-  const myProjects = [
-    {
-      id: 'securify',
-      tags: ['TypeScript', 'Security', 'Auth UI'],
-      github: 'https://github.com/Franker24/Securify',
-      demo: 'https://securify-two.vercel.app',
-      embed: 'https://securify-two.vercel.app'
-    },
-    {
-      id: 'watchweb',
-      tags: ['JavaScript', 'Media', 'Streaming UI'],
-      github: 'https://github.com/Franker24/WatchWeb',
-      demo: 'https://watch-web-gules.vercel.app',
-      embed: 'https://watch-web-gules.vercel.app'
-    },
-    {
-      id: 'coffeeweb',
-      tags: ['React', 'Coffee Brand', 'E-commerce UI'],
-      github: 'https://github.com/Franker24/CoffeeWeb',
-      demo: 'https://coffee-web-peach.vercel.app',
-      embed: 'https://coffee-web-peach.vercel.app'
-    },
-    {
-      id: 'astra',
-      tags: ['JavaScript', 'AI UI', 'Modern Landing'],
-      github: 'https://github.com/Franker24/ASTRA',
-      demo: 'https://astra-eight-steel.vercel.app',
-      embed: 'https://astra-eight-steel.vercel.app'
-    },
-    {
-      id: 'construtech',
-      tags: ['React', 'Construction', 'Landing Page'],
-      github: 'https://github.com/Franker24/Constru-Tech-',
-      demo: 'https://constru-tech-95.vercel.app',
-      embed: 'https://constru-tech-95.vercel.app'
-    }
-  ];
-
-  const timelineProjects = [
-    {
-      id: 'wisa',
-      tags: ['TypeScript', 'Saas', 'Modern UI'],
-      github: 'https://github.com/Franker24/Wisa',
-      demo: 'https://wisa-neon.vercel.app',
-      embed: 'https://wisa-neon.vercel.app',
-      image: '/wisa.png'
-    },
-    {
-      id: 'nexcrypto',
-      tags: ['React', 'Crypto', 'Dashboard UI'],
-      github: 'https://github.com/Franker24/NexCrypto',
-      demo: 'https://nex-crypto.vercel.app',
-      embed: 'https://nex-crypto.vercel.app',
-      image: '/nexcrypto.png'
-    },
-    {
-      id: 'kineticcourt',
-      tags: ['TypeScript', 'Sports UI', 'Bold Visuals'],
-      github: 'https://github.com/Franker24/KINETIC-COURT',
-      demo: 'https://kinetic-court.vercel.app',
-      embed: 'https://kinetic-court.vercel.app',
-      image: '/kinetic.png'
-    },
-    {
-      id: 'ms',
-      tags: ['React', 'Accounting', 'Clean UI'],
-      github: 'https://github.com/Franker24/Estudio-ms',
-      demo: 'https://estudio-ms.vercel.app',
-      embed: 'https://estudio-ms.vercel.app',
-      image: '/ms.png'
-    },
-    {
-      id: 'currency',
-      tags: ['HTML', 'API', 'Exchange Rates'],
-      github: 'https://github.com/Franker24/Cotizacion-de-monedas-',
-      demo: 'https://mock-omega-eight.vercel.app/',
-      embed: 'https://mock-omega-eight.vercel.app/',
-      image: '/currency.png'
-    }
-  ];
-
-  const [{ x }, api] = useSpring(() => ({
-    x: -currentIndex * 100,
-    config: { mass: 1, tension: 180, friction: 35 }
-  }));
-
-  useEffect(() => {
-    api.start({ x: -currentIndex * 100 });
-  }, [currentIndex, api]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isDragging.current) {
-        setCurrentIndex((prev) => (prev + 1) % myProjects.length);
-      }
-    }, 7000);
-
-    return () => clearInterval(interval);
-  }, [myProjects.length]);
-
-  const bind = useDrag(({ active, movement: [mx], direction: [xDir], cancel, distance, last }) => {
-    if (active && distance > 10) isDragging.current = true;
-
-    if (active && Math.abs(mx) > 60) {
-      const nextIndex = xDir > 0 ? currentIndex - 1 : currentIndex + 1;
-      if (nextIndex >= 0 && nextIndex < myProjects.length) {
-        setCurrentIndex(nextIndex);
-        cancel();
-      }
-    }
-
-    if (last) {
-      setTimeout(() => {
-        isDragging.current = false;
-      }, 50);
-      api.start({ x: -currentIndex * 100 });
-    } else {
-      api.start({ x: -currentIndex * 100 + (mx / window.innerWidth) * 100, immediate: true });
-    }
-  }, {
-    axis: 'x',
-    filterTaps: true,
-    rubberband: true
-  });
-
-
-
-  const renderPreview = (project, isCenter, index, currentIndex) => {
-    // If it's mobile, we NEVER load the iframe. Just show the beautiful fallback preview.
-    if (isMobile) {
-      return (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '2rem',
-            background: colors.fallbackBg,
-            color: colors.fallbackText,
-            textAlign: 'center',
-            filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-            transition: 'filter 0.5s'
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: '0.8rem',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                opacity: 0.7,
-                marginBottom: '0.75rem'
-              }}
-            >
-              {t(`projects.items.${project.id}.name`) ? 'Live Project' : 'Demo'}
-            </div>
-            <div
-              style={{
-                fontSize: '1.6rem',
-                fontWeight: '900',
-                letterSpacing: '-0.04em'
-              }}
-            >
-              {t(`projects.items.${project.id}.name`)}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // On Desktop:
-    const isLoaded = loadedPreviews[project.id];
-
-    if (project.embed && isCenter && isLoaded) {
-      return (
-        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-          <iframe
-            src={project.embed}
-            title={t(`projects.items.${project.id}.name`)}
-            loading="lazy"
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              borderRadius: '26px',
-              transform: 'scale(1.01)',
-              transformOrigin: 'top center',
-              filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-              transition: 'filter 0.5s'
-            }}
-          />
-          {/* Transparent touch/drag event blocker overlay */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 10,
-            cursor: isDragging.current ? 'grabbing' : 'grab',
-            backgroundColor: 'transparent'
-          }} />
-        </div>
-      );
-    }
-
-    if (project.image) {
-      return (
-        <img
-          src={project.image}
-          alt={project.id}
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: '26px',
-            objectFit: 'cover',
-            filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-            transition: 'filter 0.5s'
-          }}
-          draggable="false"
-        />
-      );
-    }
-
-    // Default or not loaded yet state (Desktop)
-    return (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '2rem',
-          background: colors.fallbackBg,
-          color: colors.fallbackText,
-          textAlign: 'center',
-          filter: isCenter ? 'grayscale(0%)' : 'grayscale(100%)',
-          transition: 'filter 0.5s',
-          position: 'relative'
-        }}
-      >
-        <div style={{ zIndex: 1 }}>
-          <div
-            style={{
-              fontSize: '0.9rem',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              opacity: 0.7,
-              marginBottom: '0.75rem'
-            }}
-          >
-            Live Project
-          </div>
-          <div
-            style={{
-              fontSize: '2.4rem',
-              fontWeight: '900',
-              letterSpacing: '-0.04em',
-              marginBottom: isCenter ? '1.5rem' : '0'
-            }}
-          >
-            {t(`projects.items.${project.id}.name`)}
-          </div>
-        </div>
-
-        {/* Cargar vista interactiva button - ONLY for the active center slide */}
-        {isCenter && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setLoadedPreviews(prev => ({ ...prev, [project.id]: true }));
-            }}
-            style={{
-              zIndex: 2,
-              padding: '0.75rem 1.5rem',
-              borderRadius: '100px',
-              border: '1px solid rgba(0, 221, 235, 0.4)',
-              backgroundColor: 'rgba(91, 66, 243, 0.15)',
-              color: '#00DDEB',
-              fontWeight: '700',
-              fontSize: '0.85rem',
-              letterSpacing: '1px',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 0 15px rgba(0, 221, 235, 0.1)',
-              backdropFilter: 'blur(10px)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(91, 66, 243, 0.35)';
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 221, 235, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(91, 66, 243, 0.15)';
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 221, 235, 0.1)';
-            }}
-          >
-            {t('projects.load_interactive')}
-          </button>
-        )}
-      </div>
-    );
-  };
-
   return (
     <section
       id="projects"
-      ref={sectionRef}
       style={{
-        padding: isMobile ? '5rem 0' : '10rem 0',
+        padding: isMobile ? '4rem 0' : '8rem 0',
         backgroundColor: colors.sectionBg,
         overflow: 'hidden',
         position: 'relative',
         transition: 'background-color 0.4s ease'
       }}
     >
-      <animated.div style={revealAnim}>
-        <div style={{ marginBottom: isMobile ? '3rem' : '5rem', textAlign: 'center' }}>
-          <h3
-            style={{
-              fontSize: isMobile ? '2.5rem' : '5rem',
-              fontWeight: '900',
-              color: colors.title,
-              margin: 0,
-              letterSpacing: '-2px',
-              transition: 'color 0.4s ease'
-            }}
-          >
-            {t('projects.section_title')} <span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle')}</span>
-          </h3>
-          <p style={{ color: colors.hint, fontSize: '1rem', marginTop: '10px', transition: 'color 0.4s ease' }}>
-            {t('projects.drag_hint', '<- Swipe to explore ->')}
-          </p>
-        </div>
+      {/* SECTION HEADER */}
+      <div style={{ marginBottom: isMobile ? '3rem' : '6rem', textAlign: 'center', padding: '0 1rem' }}>
+        <span style={{
+          fontSize: '0.75rem',
+          fontWeight: '900',
+          letterSpacing: '3px',
+          color: colors.accentLink,
+          textTransform: 'uppercase',
+          display: 'block',
+          marginBottom: '0.75rem',
+          filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.4))'
+        }}>
+          {t('projects.projects_count', '06 PROJECTS / 2024—2026')}
+        </span>
 
-        <div
-          {...bind()}
+        <motion.h3
           style={{
-            width: '100%',
-            cursor: isDragging.current ? 'grabbing' : 'grab',
-            touchAction: 'pan-y'
+            fontSize: isMobile ? '2.5rem' : '4.5rem',
+            fontWeight: '900',
+            color: colors.title,
+            margin: 0,
+            letterSpacing: '-2px',
+            transition: 'color 0.4s ease',
+            textTransform: 'uppercase'
           }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <animated.div
-            style={{
-              display: 'flex',
-              transform: x.to((val) => `translate3d(${val}%, 0, 0)`),
-              touchAction: 'pan-y'
-            }}
-          >
-            {myProjects.map((project, index) => {
-              const isCenter = currentIndex === index;
+          {t('projects.section_title')} <span style={{
+            background: 'linear-gradient(135deg, #00DDEB, #5B42F3, #AF40FF)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0 0 12px rgba(91, 66, 243, 0.45))'
+          }}>{t('projects.section_subtitle')}</span>
+        </motion.h3>
 
-              return (
-                <div
-                  key={project.id}
-                  onClick={() => !isDragging.current && setCurrentIndex(index)}
-                  style={{
-                    minWidth: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)',
-                    transform: isCenter ? 'scale(1)' : 'scale(0.8)',
-                    opacity: isCenter ? 1 : 0.4,
-                    padding: isMobile ? '0 15px' : '0 50px',
-                    userSelect: 'none'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '100%',
-                      maxWidth: '900px',
-                      height: isMobile ? '520px' : '650px',
-                      borderRadius: '40px',
-                      padding: '2px',
-                      position: 'relative',
-                      backgroundImage: isCenter
-                        ? 'linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB)'
-                        : colors.inactiveBorder,
-                      boxShadow: isCenter ? colors.shadow : 'none',
-                      transition: 'all 0.5s ease'
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: colors.panelBg,
-                        borderRadius: '38px',
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        transition: 'background-color 0.4s ease'
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '100%',
-                          height: isMobile ? '245px' : '420px',
-                          overflow: 'hidden',
-                          position: 'relative',
-                          padding: isMobile ? '14px 14px 0' : '22px 22px 0'
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            overflow: 'hidden',
-                            borderRadius: '30px',
-                            background: colors.previewShell
-                          }}
-                        >
-                          {renderPreview(project, isCenter, index, currentIndex)}
-                        </div>
+        <p style={{
+          color: colors.hint,
+          fontSize: isMobile ? '0.95rem' : '1.1rem',
+          marginTop: '15px',
+          transition: 'color 0.4s ease',
+          maxWidth: '600px',
+          margin: '15px auto 0'
+        }}>
+          {t('projects.description')}
+        </p>
+      </div>
 
-                        {project.embed && (
-                          <div
-                            style={{
-                              position: 'absolute',
-                              top: isMobile ? '18px' : '24px',
-                              right: isMobile ? '18px' : '24px',
-                              backgroundColor: colors.liveBadgeBg,
-                              color: '#00DDEB',
-                              border: colors.liveBadgeBorder,
-                              borderRadius: '999px',
-                              padding: '6px 12px',
-                              fontSize: isMobile ? '0.6rem' : '0.7rem',
-                              fontWeight: '800',
-                              letterSpacing: '0.08em',
-                              textTransform: 'uppercase',
-                              zIndex: 2,
-                              backdropFilter: 'blur(8px)'
-                            }}
-                          >
-                            Live Preview
-                          </div>
-                        )}
+      {/* FEATURED WORK COMPOSITION */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '4rem' : '0px' }}>
+        {featuredProjects.map((project, index) => (
+          <FeaturedProject
+            key={project.id}
+            project={project}
+            index={index}
+            isMobile={isMobile}
+            colors={colors}
+            t={t}
+          />
+        ))}
+      </div>
 
-                      </div>
+      {/* MORE EXPERIMENTS GRID */}
+      <MoreExperiments
+        colors={colors}
+        t={t}
+        isMobile={isMobile}
+        theme={theme}
+      />
 
-                      <div
-                        style={{
-                          padding: isMobile ? '1.1rem 1.25rem 1.25rem' : '1.4rem 1.8rem 1.7rem',
-                          margin: isMobile ? '0.9rem 14px 14px' : '1.1rem 22px 22px',
-                          backgroundColor: colors.infoBg,
-                          borderRadius: '28px',
-                          zIndex: 2,
-                          flexGrow: 1,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          backdropFilter: 'blur(10px)',
-                          transition: 'background-color 0.4s ease'
-                        }}
-                      >
-                        <div>
-                          <h4
-                            style={{
-                              fontSize: isMobile ? '1.55rem' : '2.4rem',
-                              fontWeight: '900',
-                              color: colors.title,
-                              marginBottom: '0.45rem',
-                              transition: 'color 0.4s ease'
-                            }}
-                          >
-                            {t(`projects.items.${project.id}.name`)}
-                          </h4>
-                          <p
-                            style={{
-                              color: colors.body,
-                              fontSize: isMobile ? '0.85rem' : '0.98rem',
-                              lineHeight: '1.55',
-                              maxWidth: '700px',
-                              transition: 'color 0.4s ease'
-                            }}
-                          >
-                            {t(`projects.items.${project.id}.desc`)}
-                          </p>
-                        </div>
-
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: isMobile ? 'column' : 'row',
-                            justifyContent: 'space-between',
-                            alignItems: isMobile ? 'flex-start' : 'center',
-                            gap: '1rem',
-                            marginTop: '1rem'
-                          }}
-                        >
-                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {project.tags?.map((tag) => (
-                              <span
-                                key={tag}
-                                style={{
-                                  backgroundColor: colors.tagBg,
-                                  color: '#00DDEB',
-                                  border: colors.tagBorder,
-                                  padding: '5px 12px',
-                                  borderRadius: '100px',
-                                  fontSize: '0.7rem',
-                                  fontWeight: '700'
-                                }}
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-
-                          <div style={{ display: 'flex', gap: '1.5rem' }}>
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              style={{
-                                color: colors.linkColor,
-                                textDecoration: 'none',
-                                fontWeight: '800',
-                                fontSize: '0.8rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                transition: 'color 0.4s ease'
-                              }}
-                            >
-                              <FaGithub size={18} /> {t('projects.github')}
-                            </a>
-                            <a
-                              href={project.demo}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              style={{
-                                color: colors.accentLink,
-                                textDecoration: 'none',
-                                fontWeight: '800',
-                                fontSize: '0.8rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                transition: 'color 0.4s ease'
-                              }}
-                            >
-                              <FaExternalLinkAlt size={16} /> {t('projects.live')}
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </animated.div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '12px', marginTop: '4rem', justifyContent: 'center' }}>
-          {myProjects.map((_, index) => (
-            <div
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              style={{
-                width: currentIndex === index ? '40px' : '10px',
-                height: '10px',
-                borderRadius: '5px',
-                backgroundColor: currentIndex === index ? '#5B42F3' : colors.mutedDot,
-                cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            />
-          ))}
-        </div>
-
-        {/* TIMELINE SECTION */}
-        <div style={{ marginTop: '10rem', position: 'relative', maxWidth: '1100px', margin: '10rem auto 0', padding: '0 2rem' }}>
-          <h3 style={{ fontSize: isMobile ? '2.2rem' : '4rem', fontWeight: '900', color: colors.title, textAlign: 'center', marginBottom: '6rem', letterSpacing: '-1px' }}>
-            {t('projects.section_subtitle') === 'Projects' ? 'More ' : 'Más '}<span style={{ color: '#5B42F3' }}>{t('projects.section_subtitle') === 'Projects' ? 'Projects' : 'Proyectos'}</span>
-          </h3>
-
-          <div style={{ 
-            position: 'relative',
-            display: isMobile ? 'block' : 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-            columnGap: isMobile ? '0' : '120px',
-            rowGap: isMobile ? '0' : '80px'
-          }}>
-            {/* The responsive straight vertical line track */}
-            <div style={{
-              position: 'absolute',
-              left: isMobile ? '25px' : '50%',
-              top: isMobile ? '0px' : '120px',
-              bottom: isMobile ? '50px' : '150px',
-              width: '4px',
-              transform: 'translateX(-50%)',
-              pointerEvents: 'none',
-              zIndex: 1
-            }}>
-              <svg width="100%" height="100%" style={{ overflow: 'visible' }}>
-                <defs>
-                  <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#AF40FF" />
-                    <stop offset="50%" stopColor="#5B42F3" />
-                    <stop offset="100%" stopColor="#00DDEB" />
-                  </linearGradient>
-                  <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                {/* Straight line base track (gray) */}
-                <line
-                  x1="50%"
-                  y1="0"
-                  x2="50%"
-                  y2="100%"
-                  stroke="rgba(255, 255, 255, 0.08)"
-                  strokeWidth="4"
-                />
-                {/* Glowing neon straight vertical line */}
-                <line
-                  x1="50%"
-                  y1="0"
-                  x2="50%"
-                  y2="100%"
-                  stroke="url(#lineGrad)"
-                  strokeWidth="4"
-                  filter="url(#neonGlow)"
-                  style={{ opacity: 0.8 }}
-                />
-              </svg>
-            </div>
-            
-            {timelineProjects.map((project, index) => (
-              <TimelineCard 
-                key={project.id} 
-                project={project} 
-                index={index} 
-                isMobile={isMobile} 
-                colors={colors} 
-                t={t} 
-              />
-            ))}
-          </div>
-        </div>
-
-      </animated.div>
     </section>
   );
 };

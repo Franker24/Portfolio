@@ -26,7 +26,7 @@ const Footer = () => {
       style={{ 
         ...footerAnim,
         padding: '5rem 2rem',
-        backgroundColor: '#020617', 
+        backgroundColor: '#000000', 
         borderTop: '1px solid rgba(91, 66, 243, 0.1)',
         display: 'flex',
         flexDirection: 'column',
