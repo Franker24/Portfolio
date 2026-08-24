@@ -1,10 +1,9 @@
-/* Colores por defecto (Modo Oscuro - TU ESTILO ORIGINAL) */
+/* Colores por defecto (Modo Oscuro - ESTILO ORIGINAL OPTIMIZADO) */
 :root {
-  --bg-color: #000000;              /* Negro Puro como pediste */
+  --bg-color: #000000;              /* Negro Puro */
   --text-color: #ffffff;           /* Blanco Puro */
   --text-muted: #cbd5e1;           /* Gris azulado claro */
   
-  /* Transparencias exactas de tu código original */
   --card-bg: rgba(255, 255, 255, 0.02); 
   --card-bg-hover: rgba(59, 130, 246, 0.08);
   --border-color: rgba(255, 255, 255, 0.08);
@@ -13,16 +12,16 @@
   --skill-bg: rgba(255, 255, 255, 0.015);
   --skill-bg-hover: rgba(255, 255, 255, 0.05);
   
-  --accent: #3b82f6;               /* El azul que usas en iconos/títulos */
-  --glass-bg: rgba(255, 255, 255, 0.01); /* Fondo del SummaryBox */
+  --accent: #3b82f6;               /* Azul de acento */
+  --glass-bg: rgba(10, 10, 10, 0.95);
 }
+
 /* Colores cuando el switch activa el modo claro */
 [data-theme='light'] {
-  --bg-color: #f1f5f9;             /* Fondo Gris muy claro / Blanco */
+  --bg-color: #f1f5f9;             /* Fondo Gris claro */
   --text-color: #0f172a;           /* Texto Negro / Slate oscuro */
   --text-muted: #475569;           /* Texto gris oscuro */
   
-  /* Ajustamos las transparencias para fondo claro */
   --card-bg: rgba(0, 0, 0, 0.03);  
   --card-bg-hover: rgba(59, 130, 246, 0.1);
   --border-color: rgba(0, 0, 0, 0.1);
@@ -31,14 +30,204 @@
   --skill-bg: rgba(0, 0, 0, 0.02);
   --skill-bg-hover: rgba(0, 0, 0, 0.06);
   
-  --accent: #2563eb;               /* Azul un poco más intenso para blanco */
-  --glass-bg: rgba(0, 0, 0, 0.02);
+  --accent: #2563eb;
+  --glass-bg: rgba(255, 255, 255, 0.95);
 }
 
 /* Aplicación Global */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.4s ease, color 0.4s ease;
   margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   MICRO-ANIMACIONES EN CSS PURO (GPU-Accelerated 60-120 FPS)
+   ========================================================================== */
+
+/* 1. Tarjetas Interactivas (.hover-card) */
+.hover-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.hover-card:hover {
+  transform: translateY(-8px) scale(1.012);
+  border-color: var(--border-hover) !important;
+  background-color: var(--card-bg-hover) !important;
+  box-shadow: 0 20px 45px -10px rgba(59, 130, 246, 0.22);
+}
+
+.hover-card:active {
+  transform: translateY(-2px) scale(0.988);
+  transition: transform 0.1s ease;
+}
+
+/* Zoom suave en la imagen de preview dentro de la tarjeta */
+.hover-card img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  will-change: transform;
+}
+
+.hover-card:hover img {
+  transform: scale(1.05) translateY(-2px);
+  filter: brightness(1.06);
+}
+
+/* 2. Botones Principales (.nitro-btn & .btn-interactive) */
+.nitro-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.nitro-btn:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0px 12px 30px 2px rgba(91, 66, 243, 0.45);
+}
+
+.nitro-btn:active {
+  transform: translateY(0px) scale(0.96);
+  box-shadow: 0px 4px 15px rgba(91, 66, 243, 0.3);
+  transition: transform 0.08s ease;
+}
+
+/* Efecto de destello al pasar el cursor por los botones */
+.nitro-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 70%
+  );
+  transform: rotate(25deg) translateY(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.nitro-btn:hover::after {
+  transform: rotate(25deg) translateY(100%);
+}
+
+/* 3. Píldoras de Habilidades (.skill-pill) */
+.skill-pill {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              background-color 0.25s ease,
+              box-shadow 0.25s ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.skill-pill:hover {
+  transform: translateY(-6px) scale(1.06);
+  background-color: var(--skill-bg-hover) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+}
+
+.skill-pill:hover svg {
+  color: var(--accent) !important;
+  opacity: 1 !important;
+  transform: scale(1.2) rotate(6deg);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+
+.skill-pill:active {
+  transform: scale(0.94);
+  transition: transform 0.08s ease;
+}
+
+/* 4. Íconos de Navegación (.nav-item-btn) */
+.nav-item-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-item-btn:hover {
+  transform: translateY(-2px) scale(1.15);
+  background-color: var(--card-bg-hover);
+  color: var(--text-color) !important;
+}
+
+.nav-item-btn:active {
+  transform: scale(0.9);
+}
+
+/* 5. Enlaces Directos & Botones de Acción (.project-link-btn) */
+.project-link-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.project-link-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.project-link-btn:hover svg {
+  transform: translate(3px, -3px);
+  transition: transform 0.2s ease;
+}
+
+.project-link-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+/* 6. Botones de Filtrado de Categoría (.filter-tab-btn) */
+.filter-tab-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+.filter-tab-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.filter-tab-btn:active {
+  transform: scale(0.94);
+  transition: transform 0.08s ease;
+}
+
+/* 7. Animación Pulsante de Estado (.pulse-dot) */
+@keyframes pulseDotGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.pulse-dot {
+  animation: pulseDotGlow 2s infinite;
 }

@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGithub, FaLinkedin, FaSun, FaMoon } from 'react-icons/fa';
-import { useSpring, animated, config } from '@react-spring/web';
 
-// Componente para los iconos con animación de Hover
+// Componente optimizado para los iconos con animación CSS pura (super fluido en scroll)
 const NavItem = ({ children, onClick, href }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const springProps = useSpring({
-    scale: isHovered ? 1.15 : 1,
-    backgroundColor: isHovered ? 'var(--card-bg-hover)' : 'transparent',
-    color: isHovered ? 'var(--text-color)' : 'var(--text-muted)',
-    config: config.wobbly
-  });
-
   const content = (
-    <animated.div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <div
       onClick={onClick}
+      className="nav-item-btn"
       style={{
-        ...springProps,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -28,11 +16,12 @@ const NavItem = ({ children, onClick, href }) => {
         height: '40px',
         borderRadius: '12px',
         cursor: 'pointer',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        color: 'var(--text-muted)'
       }}
     >
       {children}
-    </animated.div>
+    </div>
   );
 
   return href ? (
@@ -52,20 +41,6 @@ const Navbar = ({ theme, toggleTheme }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Animación de entrada fluida (desde la izquierda en PC, desde abajo en móvil)
-  const navAnim = useSpring({
-    from: {
-      opacity: 0,
-      transform: isMobile ? 'translate3d(-50%, 50px, 0)' : 'translate3d(-50px, -50%, 0)'
-    },
-    to: {
-      opacity: 1,
-      transform: isMobile ? 'translate3d(-50%, 0px, 0)' : 'translate3d(0px, -50%, 0)'
-    },
-    config: { mass: 1, tension: 120, friction: 20 },
-    reset: true // Reinicia la animación si cambia entre móvil/desktop
-  });
-
   const toggleLanguage = () => {
     const nextLang = i18n.language.startsWith('en') ? 'es' : 'en';
     i18n.changeLanguage(nextLang);
@@ -81,27 +56,25 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   };
 
-  // --- Estilos Base ---
+  // Estilos Base Ultralivianos
   const containerStyle = {
     position: 'fixed',
     zIndex: 1000,
-    // Lógica Responsive: Left en PC, Bottom en Móvil
     top: isMobile ? 'auto' : '50%',
     bottom: isMobile ? '20px' : 'auto',
     left: isMobile ? '50%' : '30px',
-
+    transform: isMobile ? 'translateX(-50%)' : 'translateY(-50%)',
     display: 'flex',
     flexDirection: isMobile ? 'row' : 'column',
     alignItems: 'center',
     gap: '12px',
     padding: '12px',
-
-    // Glassmorphism Premium
     backgroundColor: 'var(--glass-bg)',
-    backdropFilter: 'blur(20px)',
     border: '1px solid var(--border-color)',
     borderRadius: '24px',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+    boxShadow: '0 15px 35px rgba(0,0,0,0.3)',
+    backfaceVisibility: 'hidden',
+    willChange: 'transform'
   };
 
   const dividerStyle = {
@@ -112,9 +85,8 @@ const Navbar = ({ theme, toggleTheme }) => {
   };
 
   return (
-    <animated.nav style={{ ...containerStyle, ...navAnim }}>
-
-      {/* 1. Logo (Botón de inicio) */}
+    <nav style={containerStyle}>
+      {/* 1. Logo */}
       <a href="#hero" onClick={scrollToHero} style={{ textDecoration: 'none' }}>
         <div style={{
           width: '40px', height: '40px', borderRadius: '14px',
@@ -140,7 +112,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 
       <div style={dividerStyle}></div>
 
-      {/* 3. Controles Rápidos (Tema e Idioma) */}
+      {/* 3. Controles Rápidos */}
       <NavItem onClick={toggleTheme}>
         {theme === 'light' ? <FaMoon size={18} /> : <FaSun size={18} />}
       </NavItem>
@@ -150,8 +122,7 @@ const Navbar = ({ theme, toggleTheme }) => {
           {i18n.language.substring(0, 2)}
         </span>
       </NavItem>
-
-    </animated.nav>
+    </nav>
   );
 };
 

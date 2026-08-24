@@ -8,16 +8,9 @@ import Footer from './components/Footer';
 import Loader from './components/Loader';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  // Loader desactivado por requerimiento (componente Loader preservado intacto en ./components/Loader)
+  const [isLoading, setIsLoading] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -38,8 +31,7 @@ function App() {
     margin: 0,
     padding: 0,
     fontFamily: 'system-ui, -apple-system, sans-serif',
-    overflowX: 'hidden',
-    transition: 'background-color 0.4s ease, color 0.4s ease'
+    overflowX: 'hidden'
   };
 
   return (

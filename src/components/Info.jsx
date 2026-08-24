@@ -1,96 +1,49 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useSpring, animated, useTransition } from '@react-spring/web';
-import { FaReact, FaNodeJs, FaUniversity, FaCode } from 'react-icons/fa';
-import { SiTypescript, SiMongodb, SiNextdotjs, SiExpress, SiOpenlayers, SiPython, SiDocker, SiVercel, SiGit, SiGithub, SiNpm, SiJavascript, SiHtml5, SiCss3, SiTailwindcss } from 'react-icons/si';
+import { FaReact, FaNodeJs, FaUniversity, FaCode, FaLaptopCode } from 'react-icons/fa';
+import { SiTypescript, SiMongodb, SiNextdotjs, SiExpress, SiOpenlayers, SiPython, SiVercel, SiGit, SiGithub, SiNpm, SiJavascript, SiHtml5, SiCss3, SiTailwindcss } from 'react-icons/si';
 import { BsTerminal } from "react-icons/bs";
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-ScrollTrigger.config({ ignoreMobileResize: true });
-
-const HoverBox = ({ children, style }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [hoverSpring, hoverApi] = useSpring(() => ({
-    y: 0,
-    scale: 1,
-    glow: 0
-  }));
-
-  const handleEnter = () => {
-    setIsHovered(true);
-    hoverApi.start({ y: -6, scale: 1.01, glow: 1 });
-  };
-
-  const handleLeave = () => {
-    setIsHovered(false);
-    hoverApi.start({ y: 0, scale: 1, glow: 0 });
-  };
-
-  return (
-    <animated.div
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      style={{
-        ...style,
-        transform: hoverSpring.scale.to((scale) => `translateY(${hoverSpring.y.get()}px) scale(${scale})`),
-        boxShadow: hoverSpring.glow.to((glow) => `0 30px 60px rgba(59, 130, 246, ${0.12 * glow})`),
-        borderColor: isHovered ? 'var(--border-hover)' : 'var(--border-color)',
-        backgroundColor: isHovered ? 'var(--card-bg-hover)' : style?.backgroundColor || 'var(--card-bg)',
-        transition: 'background-color 0.4s ease, border-color 0.4s ease'
-      }}
-    >
-      {children}
-    </animated.div>
-  );
-};
-
-// --- Item de Skill Individual (Estilo "Pill" o Tarjeta Interna) ---
+// --- Item de Skill Individual (Estilo "Pill" con Hover CSS NATIVO) ---
 const SkillItem = ({ skillKey, icon: Icon, color, onClick, isMobile }) => {
   const { t } = useTranslation();
-  const [isHovered, setIsHovered] = useState(false);
   const name = t(`info.skills.${skillKey}.name`);
 
   return (
     <div
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="skill-pill"
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
         padding: isMobile ? '1.25rem 0.5rem' : '1.5rem 1rem',
         borderRadius: '24px',
-        backgroundColor: isHovered ? 'var(--skill-bg-hover)' : 'var(--skill-bg)',
-        border: `1px solid ${isHovered ? (color || 'var(--border-hover)') : 'var(--border-color)'}`,
-        boxShadow: isHovered ? `0 10px 25px ${color || 'var(--accent)'}25` : 'none',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        backgroundColor: 'var(--skill-bg)',
+        border: '1px solid var(--border-color)',
         cursor: 'pointer',
-        transform: isHovered ? 'translateY(-5px)' : 'translateY(0px)',
         width: '100%',
         boxSizing: 'border-box'
       }}
     >
       <Icon style={{
         fontSize: isMobile ? '2.5rem' : '3rem',
-        color: isHovered ? (color || 'var(--accent)') : 'var(--text-color)',
-        opacity: isHovered ? 1 : 0.6,
-        transition: 'all 0.3s ease',
-        filter: isHovered ? `drop-shadow(0 0 12px ${color || 'var(--accent)'}88)` : 'none'
+        color: color || 'var(--accent)',
+        opacity: 0.85,
+        transition: 'all 0.25s ease'
       }} />
       <span style={{
-        fontSize: isMobile ? '0.8rem' : '0.85rem', fontWeight: '700', letterSpacing: '1px',
+        fontSize: isMobile ? '0.8rem' : '0.85rem',
+        fontWeight: '700',
+        letterSpacing: '1px',
         color: 'var(--text-color)',
-        opacity: isHovered ? 1 : 0.5,
-        transition: 'opacity 0.3s ease',
+        opacity: 0.8,
         textAlign: 'center'
       }}>{name}</span>
     </div>
   );
 };
 
-// --- Tarjeta de Categoría (Frontend, Backend, etc) ---
+// --- Tarjeta de Categoría ---
 const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile }) => {
   const { t } = useTranslation();
   const title = t(`info.categories.${categoryKey}`);
@@ -107,8 +60,7 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
   };
 
   return (
-    <HoverBox style={cardStyle} className="gsap-skill-card">
-      {/* Cabecera de la tarjeta */}
+    <div style={cardStyle} className="hover-card">
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
@@ -123,7 +75,6 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
         {badge && <span style={categoryBadgeStyle}>{badge}</span>}
       </div>
 
-      {/* Grilla de iconos con más espacio */}
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(80px, 1fr))', 
@@ -132,7 +83,7 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
         width: '100%'
       }}>
         {skills.map((item, idx) => (
-          <div key={idx} className="gsap-skill-pill" style={{ width: '100%' }}>
+          <div key={idx} style={{ width: '100%' }}>
             <SkillItem 
               skillKey={item.key} 
               icon={item.icon} 
@@ -143,77 +94,29 @@ const CategoryCard = ({ categoryKey, badgeKey, skills, onSkillClick, isMobile })
           </div>
         ))}
       </div>
-    </HoverBox>
-  );
-};
-
-// --- Modal Helper Buttons ---
-const CloseButton = ({ onClick }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        ...modalCloseButtonStyle,
-        opacity: isHovered ? 1 : 0.6,
-        backgroundColor: isHovered ? 'var(--card-bg-hover)' : 'transparent',
-      }}
-      aria-label="Close"
-    >
-      &times;
-    </button>
-  );
-};
-
-const BottomCloseButton = ({ onClick, text }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        ...modalBottomButtonStyle,
-        backgroundColor: isHovered ? 'var(--card-bg-hover)' : 'var(--card-bg)',
-        borderColor: isHovered ? 'var(--border-hover)' : 'var(--border-color)',
-        transform: isHovered ? 'scale(1.03)' : 'scale(1)',
-      }}
-    >
-      {text}
-    </button>
+    </div>
   );
 };
 
 // --- EduTag ---
 const EduTag = ({ icon: Icon, title, subtitle, color, isMobile }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const responsiveEduItemStyle = {
-    padding: isMobile ? '16px 20px' : '24px 40px',
-    borderRadius: '28px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-    transition: 'all 0.3s ease',
-    cursor: 'default',
-    width: '100%',
-    boxSizing: 'border-box'
-  };
-
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="hover-card"
       style={{
-        ...responsiveEduItemStyle,
-        backgroundColor: isHovered ? 'var(--card-bg-hover)' : 'var(--card-bg)',
-        border: `1px solid ${isHovered ? color : 'var(--border-color)'}`,
-        boxShadow: isHovered ? `0 10px 30px ${color}22` : 'none',
-        transform: isHovered ? 'translateY(-5px)' : 'translateY(0px)'
+        padding: isMobile ? '16px 20px' : '24px 40px',
+        borderRadius: '28px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '20px',
+        cursor: 'default',
+        width: '100%',
+        boxSizing: 'border-box',
+        backgroundColor: 'var(--card-bg)',
+        border: '1px solid var(--border-color)'
       }}
     >
-      <Icon style={{ color: color, fontSize: '1.5rem', filter: isHovered ? `drop-shadow(0 0 5px ${color})` : 'none' }} />
+      <Icon style={{ color: color, fontSize: '1.5rem' }} />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <span style={{ fontWeight: '600', color: 'var(--text-color)', fontSize: isMobile ? '0.95rem' : '1rem' }}>{title}</span>
         <span style={{ color: 'var(--text-muted)', fontSize: isMobile ? '0.8rem' : '0.9rem' }}>{subtitle}</span>
@@ -226,16 +129,13 @@ const Info = () => {
   const { t } = useTranslation();
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
-  const containerRef = useRef(null);
 
-  // Track resize
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle escape key to close modal
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -245,144 +145,28 @@ const Info = () => {
     if (selectedSkill) {
       window.addEventListener('keydown', handleKeyDown);
     }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedSkill]);
-
-  // GSAP Animations
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Summary Box
-      gsap.fromTo('.gsap-summary-box',
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: '.gsap-summary-box',
-            start: isMobile ? 'top 98%' : 'top 85%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
- 
-      // Experience title
-      gsap.fromTo('.gsap-exp-title',
-        { opacity: 0, y: 30, filter: 'blur(5px)' },
-        {
-          opacity: 1, y: 0, filter: 'blur(0px)',
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: '.gsap-exp-title',
-            start: isMobile ? 'top 98%' : 'top 85%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
- 
-      // Experience cards
-      gsap.fromTo('.gsap-exp-card',
-        { opacity: 0, y: 40, scale: 0.96 },
-        {
-          opacity: 1, y: 0, scale: 1,
-          duration: 0.8,
-          stagger: 0.15,
-          scrollTrigger: {
-            trigger: '.gsap-exp-card',
-            start: isMobile ? 'top 98%' : 'top 90%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
- 
-      // Tech stack title
-      gsap.fromTo('.gsap-tech-title',
-        { opacity: 0, y: 30, filter: 'blur(5px)' },
-        {
-          opacity: 1, y: 0, filter: 'blur(0px)',
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: '.gsap-tech-title',
-            start: isMobile ? 'top 98%' : 'top 85%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
- 
-      // Skill Category Cards and inner skill icons staggered entry
-      const categories = gsap.utils.toArray('.gsap-skill-card');
-      categories.forEach((card) => {
-        gsap.fromTo(card,
-          { opacity: 0, y: 40, scale: 0.95 },
-          {
-            opacity: 1, y: 0, scale: 1,
-            duration: 0.7,
-            scrollTrigger: {
-              trigger: card,
-              start: isMobile ? 'top 98%' : 'top 90%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        );
- 
-        const pills = card.querySelectorAll('.gsap-skill-pill');
-        gsap.fromTo(pills,
-          { opacity: 0, scale: 0.7, y: 15 },
-          {
-            opacity: 1, scale: 1, y: 0,
-            duration: 0.4,
-            stagger: 0.05,
-            scrollTrigger: {
-              trigger: card,
-              start: isMobile ? 'top 98%' : 'top 85%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        );
-      });
- 
-      // Education tags
-      gsap.fromTo('.gsap-edu-tag',
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1, y: 0,
-          duration: 0.6,
-          stagger: 0.15,
-          scrollTrigger: {
-            trigger: '.gsap-edu-tags',
-            start: isMobile ? 'top 98%' : 'top 90%',
-            toggleActions: 'play none none reverse'
-          }
-        }
-      );
-    }, containerRef);
- 
-    // Force a ScrollTrigger refresh after initial DOM paint to ensure accurate positions
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 200);
- 
-    return () => {
-      ctx.revert();
-      clearTimeout(refreshTimer);
-    };
-  }, [isMobile]);
 
   const experiences = [
     {
-      key: "onlydust",
-      icon: SiOpenlayers,
-      color: "var(--accent)"
+      key: "estudioms",
+      icon: FaLaptopCode,
+      color: "#10b981"
     },
     {
       key: "freelance",
       icon: FaCode,
-      color: "var(--accent)"
+      color: "#3b82f6"
+    },
+    {
+      key: "onlydust",
+      icon: SiOpenlayers,
+      color: "#AF40FF"
     }
   ];
 
-  // Estructura de Skills Agrupada con traducción i18n
+  // Estructura de Skills Frontend & Herramientas (Sin Docker)
   const skillCategories = [
     {
       key: "frontend",
@@ -421,44 +205,35 @@ const Info = () => {
       key: "learning",
       badgeKey: "progress",
       skills: [
-        { key: "python", icon: SiPython, color: "#3776AB" },
-        { key: "docker", icon: SiDocker, color: "#2496ED" }
+        { key: "python", icon: SiPython, color: "#3776AB" }
       ]
     }
   ];
 
-  const modalTransitions = useTransition(selectedSkill, {
-    from: { opacity: 0, scale: 0.9 },
-    enter: { opacity: 1, scale: 1 },
-    leave: { opacity: 0, scale: 0.9 },
-    config: { tension: 300, friction: 20 }
-  });
-
-  // Estilos React Dinámicos y Responsivos
   const responsiveSectionStyle = {
-    padding: isMobile ? '5rem 1.25rem' : '10rem 2rem',
+    padding: isMobile ? '4rem 1.25rem' : '8rem 2rem',
     backgroundColor: 'var(--bg-color)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: isMobile ? '3.5rem' : '7rem',
+    gap: isMobile ? '3rem' : '6rem',
     position: 'relative',
     overflow: 'hidden',
-    transition: 'background-color 0.4s ease',
-    width: '100%'
+    width: '100%',
+    transform: 'translateZ(0)'
   };
 
   const responsiveSummaryBoxStyle = {
-    backdropFilter: 'blur(25px)',
     borderRadius: isMobile ? '28px' : '40px',
     border: '1px solid var(--border-color)',
-    padding: isMobile ? '3rem 1.5rem' : '5rem 4rem',
+    padding: isMobile ? '2.5rem 1.5rem' : '4.5rem 4rem',
     textAlign: 'center',
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'var(--card-bg)'
   };
 
   const responsiveTitleStyle = {
-    fontSize: isMobile ? '2.2rem' : '4rem',
+    fontSize: isMobile ? '2.2rem' : '3.8rem',
     color: 'var(--text-color)',
     marginBottom: '1.5rem',
     fontWeight: '900',
@@ -469,38 +244,24 @@ const Info = () => {
   const responsiveDescriptionStyle = {
     color: 'var(--text-muted)',
     lineHeight: '1.7',
-    fontSize: isMobile ? '1.05rem' : '1.25rem',
-    maxWidth: '800px',
+    fontSize: isMobile ? '1.05rem' : '1.2rem',
+    maxWidth: '820px',
     margin: '0 auto'
   };
 
   const responsiveExpCardStyle = {
-    padding: isMobile ? '2rem 1.5rem' : '3.5rem 3rem',
+    padding: isMobile ? '2rem 1.5rem' : '3rem 2.5rem',
     borderRadius: '32px',
     border: '1px solid var(--border-color)',
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'var(--card-bg)'
   };
 
   const responsiveCategoryGridStyle = {
     display: 'grid',
     gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
-    gap: isMobile ? '2rem' : '3.5rem',
+    gap: isMobile ? '2rem' : '3rem',
     width: '100%'
-  };
-
-  const responsiveModalContentStyle = {
-    backgroundColor: 'var(--bg-color)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '28px',
-    padding: isMobile ? '2.5rem 1.25rem' : '3rem',
-    maxWidth: '500px',
-    width: '90%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-    position: 'relative',
-    transition: 'background-color 0.4s ease, border-color 0.4s ease'
   };
 
   const neonTitleStyle = {
@@ -514,16 +275,15 @@ const Info = () => {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     display: 'inline-block',
-    width: '100%',
-    filter: 'drop-shadow(0 0 10px rgba(91, 66, 243, 0.45))'
+    width: '100%'
   };
 
   return (
-    <section id="info" ref={containerRef} style={responsiveSectionStyle}>
+    <section id="info" style={responsiveSectionStyle}>
 
       {/* SUMMARY BOX */}
-      <div className="gsap-summary-box" style={summaryWrapperStyle}>
-        <HoverBox style={responsiveSummaryBoxStyle}>
+      <div style={summaryWrapperStyle}>
+        <div style={responsiveSummaryBoxStyle} className="hover-card">
           <div style={statusBadgeStyle}>
             <div style={pulseDotStyle}></div>
             <span style={statusTextStyle}>{t('info.status')}</span>
@@ -532,28 +292,28 @@ const Info = () => {
             {t('info.title_p1')} <br /> <span style={{ color: 'var(--accent)' }}>{t('info.title_p2')}</span>
           </h3>
           <p style={responsiveDescriptionStyle}>{t('info.description')}</p>
-        </HoverBox>
+        </div>
       </div>
 
       {/* EXPERIENCE */}
       <div style={{ width: '100%', maxWidth: '1000px', zIndex: 1 }}>
-        <h4 className="gsap-exp-title" style={neonTitleStyle}>{t('info.exp_title')}</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+        <h3 style={neonTitleStyle}>{t('info.exp_title')}</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {experiences.map((exp, idx) => {
             const ExpIcon = exp.icon;
             return (
-              <div key={idx} className="gsap-exp-card" style={{ width: '100%' }}>
-                <HoverBox style={responsiveExpCardStyle}>
+              <div key={idx} style={{ width: '100%' }}>
+                <div style={responsiveExpCardStyle} className="hover-card">
                   <div style={expHeaderStyle}>
                     <ExpIcon style={{ color: exp.color, fontSize: '2.5rem' }} />
                     <div>
-                      <h5 style={{ margin: 0, fontSize: isMobile ? '1.2rem' : '1.4rem', color: 'var(--text-color)' }}>{t(`info.experiences.${exp.key}.role`)}</h5>
+                      <h4 style={{ margin: 0, fontSize: isMobile ? '1.2rem' : '1.4rem', color: 'var(--text-color)' }}>{t(`info.experiences.${exp.key}.role`)}</h4>
                       <p style={{ margin: 0, color: 'var(--accent)', fontWeight: 'bold' }}>{t(`info.experiences.${exp.key}.company`)}</p>
                     </div>
                     <span style={dateBadgeStyle}>{t(`info.experiences.${exp.key}.date`)}</span>
                   </div>
-                  <p style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: isMobile ? '0.95rem' : '1.1rem' }}>{t(`info.experiences.${exp.key}.desc`)}</p>
-                </HoverBox>
+                  <p style={{ color: 'var(--text-muted)', lineHeight: '1.7', fontSize: isMobile ? '0.95rem' : '1.05rem', margin: 0 }}>{t(`info.experiences.${exp.key}.desc`)}</p>
+                </div>
               </div>
             );
           })}
@@ -561,8 +321,8 @@ const Info = () => {
       </div>
 
       {/* SKILLS CATEGORY GRID */}
-      <div style={{ width: '100%', maxWidth: '1300px', zIndex: 1, marginTop: '2rem' }}>
-        <h4 className="gsap-tech-title" style={neonTitleStyle}>{t('info.tech_stack')}</h4>
+      <div style={{ width: '100%', maxWidth: '1300px', zIndex: 1, marginTop: '1rem' }}>
+        <h3 style={neonTitleStyle}>{t('info.tech_stack')}</h3>
         <div style={responsiveCategoryGridStyle}>
           {skillCategories.map((category, index) => (
             <CategoryCard 
@@ -578,71 +338,70 @@ const Info = () => {
       </div>
 
       {/* EDUCATION TAGS */}
-      <div className="gsap-edu-tags" style={educationWrapperStyle}>
-        <div className="gsap-edu-tag" style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '280px', maxWidth: '500px' }}>
+      <div style={educationWrapperStyle}>
+        <div style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '280px', maxWidth: '500px' }}>
           <EduTag icon={FaUniversity} title="UTN FRBA" subtitle={t('info.edu_utn')} color="#3b82f6" isMobile={isMobile} />
         </div>
-        <div className="gsap-edu-tag" style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '280px', maxWidth: '500px' }}>
+        <div style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '280px', maxWidth: '500px' }}>
           <EduTag icon={FaCode} title="freeCodeCamp" subtitle={t('info.edu_fcc')} color="#ff00ff" isMobile={isMobile} />
         </div>
       </div>
 
       {/* SKILL DETAIL MODAL */}
-      {typeof document !== 'undefined' && createPortal(
-        modalTransitions(
-          (style, item) => {
-            if (!item) return null;
-            const SkillIcon = item.icon;
-            return (
-              <animated.div
-                style={{
-                  ...modalOverlayStyle,
-                  opacity: style.opacity
-                }}
-                onClick={() => setSelectedSkill(null)}
-              >
-                <animated.div
-                  style={{
-                    ...responsiveModalContentStyle,
-                    transform: style.scale.to((s) => `scale(${s})`),
-                    boxShadow: `0 25px 60px ${item.color}22`,
-                    borderColor: item.color || 'var(--border-color)'
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <CloseButton onClick={() => setSelectedSkill(null)} />
-                  <SkillIcon style={{
-                    fontSize: '4.5rem',
-                    color: item.color || 'var(--accent)',
-                    filter: `drop-shadow(0 0 16px ${item.color || 'var(--accent)'}66)`,
-                    marginBottom: '1.5rem'
-                  }} />
-                  <h4 style={{
-                    fontSize: '2rem',
-                    fontWeight: '900',
-                    color: 'var(--text-color)',
-                    marginBottom: '1rem',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {t(`info.skills.${item.key}.name`)}
-                  </h4>
-                  <p style={{
-                    color: 'var(--text-muted)',
-                    lineHeight: '1.7',
-                    fontSize: '1.1rem',
-                    maxWidth: '400px'
-                  }}>
-                    {t(`info.skills.${item.key}.desc`)}
-                  </p>
-                  <BottomCloseButton
-                    onClick={() => setSelectedSkill(null)}
-                    text={t('info.close')}
-                  />
-                </animated.div>
-              </animated.div>
-            );
-          }
-        ),
+      {selectedSkill && typeof document !== 'undefined' && createPortal(
+        <div style={modalOverlayStyle} onClick={() => setSelectedSkill(null)}>
+          <div
+            style={{
+              backgroundColor: 'var(--bg-color)',
+              border: `1px solid ${selectedSkill.color || 'var(--border-color)'}`,
+              borderRadius: '28px',
+              padding: isMobile ? '2.5rem 1.5rem' : '3rem',
+              maxWidth: '480px',
+              width: '90%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              position: 'relative',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.5)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedSkill(null)}
+              style={modalCloseButtonStyle}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+
+            {React.createElement(selectedSkill.icon, {
+              style: {
+                fontSize: '4rem',
+                color: selectedSkill.color || 'var(--accent)',
+                marginBottom: '1.5rem'
+              }
+            })}
+
+            <h4 style={{
+              fontSize: '1.8rem',
+              fontWeight: '900',
+              color: 'var(--text-color)',
+              marginBottom: '1rem'
+            }}>
+              {t(`info.skills.${selectedSkill.key}.name`)}
+            </h4>
+
+            <p style={{
+              color: 'var(--text-muted)',
+              lineHeight: '1.6',
+              fontSize: '1.05rem',
+              margin: 0
+            }}>
+              {t(`info.skills.${selectedSkill.key}.desc`)}
+            </p>
+          </div>
+        </div>,
         document.body
       )}
     </section>
@@ -651,10 +410,10 @@ const Info = () => {
 
 // --- Estilos Estáticos ---
 const summaryWrapperStyle = { maxWidth: '1000px', width: '100%', zIndex: 1 };
-const statusBadgeStyle = { display: 'inline-flex', alignItems: 'center', gap: '12px', backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '10px 20px', borderRadius: '100px', marginBottom: '2.5rem' };
+const statusBadgeStyle = { display: 'inline-flex', alignItems: 'center', gap: '12px', backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '10px 20px', borderRadius: '100px', marginBottom: '2rem' };
 const pulseDotStyle = { width: '10px', height: '10px', backgroundColor: 'var(--accent)', borderRadius: '50%' };
 const statusTextStyle = { color: 'var(--accent)', fontSize: '0.8rem', fontWeight: '800', letterSpacing: '1.5px' };
-const expHeaderStyle = { display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '2rem', flexWrap: 'wrap' };
+const expHeaderStyle = { display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '1.5rem', flexWrap: 'wrap' };
 const dateBadgeStyle = { marginLeft: 'auto', backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', padding: '8px 18px', borderRadius: '12px', color: 'var(--text-muted)', fontSize: '0.95rem', fontWeight: '600' };
 
 const categoryBadgeStyle = {
@@ -663,17 +422,15 @@ const categoryBadgeStyle = {
   padding: '6px 14px', borderRadius: '100px'
 };
 
-const educationWrapperStyle = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', maxWidth: '1100px', zIndex: 1, marginTop: '2rem', width: '100%', boxSizing: 'border-box' };
+const educationWrapperStyle = { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem', maxWidth: '1100px', zIndex: 1, marginTop: '1rem', width: '100%', boxSizing: 'border-box' };
 
-// --- Estilos para el Modal ---
 const modalOverlayStyle = {
   position: 'fixed',
   top: 0,
   left: 0,
   width: '100%',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  backdropFilter: 'blur(12px)',
+  backgroundColor: 'rgba(0, 0, 0, 0.85)',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -682,33 +439,20 @@ const modalOverlayStyle = {
 
 const modalCloseButtonStyle = {
   position: 'absolute',
-  top: '1.5rem',
-  right: '1.5rem',
+  top: '1.25rem',
+  right: '1.25rem',
   background: 'none',
   border: 'none',
   color: 'var(--text-color)',
-  fontSize: '1.5rem',
+  fontSize: '1.6rem',
   cursor: 'pointer',
-  opacity: 0.6,
-  transition: 'all 0.2s ease',
+  opacity: 0.7,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   width: '36px',
   height: '36px',
   borderRadius: '50%',
-};
-
-const modalBottomButtonStyle = {
-  marginTop: '2rem',
-  padding: '0.8rem 2rem',
-  borderRadius: '100px',
-  border: '1px solid var(--border-color)',
-  backgroundColor: 'var(--card-bg)',
-  color: 'var(--text-color)',
-  fontWeight: '700',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
 };
 
 export default Info;

@@ -14,7 +14,7 @@ i18n
       en: {
         translation: {
           hero: {
-            role: 'Fullstack Web Developer | Open to Remote Opportunities',
+            role: 'Frontend Web Developer | Open to Remote Opportunities',
             cta_projects: 'View Projects',
             cta_about: 'About Me'
           },
@@ -22,20 +22,26 @@ i18n
             status: 'OPEN TO WORK',
             title_p1: 'Professional',
             title_p2: 'Profile',
-            description: 'Frontend Developer focused on building modern, responsive, and visually polished web applications using React and modern JavaScript technologies. Experienced in creating landing pages, SaaS interfaces, dashboards, and interactive user experiences with strong attention to UI design, performance, and scalability. Currently evolving into a Fullstack role while expanding knowledge in backend development and modern web architectures.',
+            description: 'Frontend Web Developer specializing in creating high-converting websites, modern landing pages, SaaS interfaces, and interactive web applications using React, Next.js, and TypeScript. Focused on delivering premium UI design, fast loading speeds, responsive layouts, and outstanding user experiences tailored for businesses and commercial products.',
             exp_title: 'Experience',
             experiences: {
-              onlydust: {
-                role: 'Open Source Contributor',
-                company: 'OnlyDust',
-                date: 'Sept. 2024 - Present',
-                desc: 'Contributing to high-impact open-source repositories. Focused on implementing new features, code optimization, and resolving complex issues to enhance system efficiency and stability.'
+              estudioms: {
+                role: 'Web Developer (Commercial Client)',
+                company: 'Estudio MS (Paid Commercial Project)',
+                date: '2024 - Production',
+                desc: 'Full development of a commercial production website and client intake portal for a professional accounting firm. Implemented clean corporate design, interactive service showcase, lead ingestion, and WhatsApp API integration.'
               },
               freelance: {
                 role: 'Frontend Developer',
                 company: 'Freelance & Personal Projects',
                 date: '2024 - Present',
-                desc: 'Developed and designed multiple modern web applications and interactive interfaces for different digital products and concepts. Projects include AstraIA, an AI-inspired futuristic interface focused on immersive user experience; Wisa, a SaaS-style platform with modern UI architecture and responsive layouts; and NexCrypto, a crypto dashboard concept built with dynamic visual components and real-time inspired design systems. Focused on responsive development, reusable component structures, smooth animations, and scalable frontend architecture using React and modern JavaScript ecosystems.'
+                desc: 'Designed and engineered modern web applications and digital interfaces for commercial concepts and clients. Developed tailored web products including CoffeeWeb (gourmet coffee landing & e-commerce), ASTRA (astronomy web application), WatchWeb (luxury watch e-commerce store), Elite Store (premium fashion e-commerce), Constru-Tech (industrial corporate web app), and KINETIC COURT (basketball sportswear e-commerce store). Focused on responsive layout systems, component design, and optimal load performance.'
+              },
+              onlydust: {
+                role: 'Open Source Contributor',
+                company: 'OnlyDust',
+                date: 'Sept. 2024 - Present',
+                desc: 'Contributing to high-impact open-source repositories. Focused on implementing new features, code optimization, and resolving complex issues to enhance system efficiency and stability.'
               }
             },
             edu_utn: 'FullStack Development Program · 2024',
@@ -73,28 +79,40 @@ i18n
             }
           },
           projects: {
-            section_title: 'Selected',
-            section_subtitle: 'Work',
-            description: 'A selection of products, systems and experiments I\'ve designed and engineered.',
-            projects_count: '06 PROJECTS / 2024—2026',
-            more_title: 'Other',
-            more_subtitle: 'Projects',
-            github: 'Source',
-            live: 'Live Demo',
-            load_interactive: 'Load Interactive Preview',
+            section_title: 'Featured',
+            section_subtitle: 'Web Solutions',
+            description: 'Specialized Frontend web applications, commercial client websites, e-commerce storefronts, and interactive web interfaces built for businesses.',
+            projects_count: 'FRONTEND PORTFOLIO / 2024—2026',
+            categories: {
+              all: 'All Projects',
+              websites: 'Commercial Websites',
+              ecommerce: 'E-Commerce Stores',
+              interactive: 'Interactive Web Apps'
+            },
+            cta: {
+              badge: 'AVAILABLE FOR NEW WEB PROJECTS',
+              title: 'Ready to elevate your business with a modern website?',
+              subtitle: 'I turn designs and ideas into high-converting, high-performance web applications optimized for search engines, lightning fast, and built to get clients.',
+              button: "Let's Connect on LinkedIn",
+              features: {
+                f1: 'Custom Web Design',
+                f2: 'Lightning Fast Load',
+                f3: 'SEO & High Conversion',
+                f4: 'WhatsApp API Integration'
+              }
+            },
+            more_title: 'Explore',
+            more_subtitle: 'Frontend Work',
+            github: 'Source Code',
+            live: 'Live Site',
             items: {
-              nexus: { name: 'NEXUS', subtitle: 'Autonomous Multi-Agent Operations Platform', desc: 'An autonomous platform that investigates production incidents, retrieves organizational context, evaluates remediation risks, and executes approved recovery tools with human-in-the-loop governance.' },
-              sentinel: { name: 'SENTINEL AI', subtitle: 'Enterprise AI Operations & Data Governance', desc: 'Enterprise data operations and incident response system powered by Gemini 2.5 Flash and DataHub metadata catalog. Visualizes upstream data flows and downstream business impacts with lineage graphs.' },
-              billora: { name: 'BILLORA', subtitle: 'The AI Financial Operating System', desc: 'A professional financial management suite to handle invoices, customer databases, and real-time payments, powered by server-side Gemini intelligence and rich visualizations.' },
-              astraia: { name: 'ASTRAIA', subtitle: 'Intelligent AI Assistant Platform', desc: 'A high-performance personal assistant interface built with Google Gemini, featuring fast server-side isolation, custom tools, and optimized Markdown chat rendering.' },
-              momentum: { name: 'MOMENTUM', subtitle: 'SaaS Gym & Fitness Product', desc: 'Premium fitness management SaaS featuring real-time class bookings, workout planning, maps integration, and a dual-persistence local-first caching layer synchronized with Firebase Firestore.' },
-              revrecover: { name: 'RevRecover AI', subtitle: 'Revenue Leakage & Churn Audit Engine', desc: 'B2B SaaS churn audit engine featuring forensic financial calculations, churn diagnosis, and automated API webhook recovery playbooks using structured JSON outputs.' },
-              ms: { name: 'Estudio MS', subtitle: 'Paid Commercial Client Project · Financial & Accounting', desc: 'Commercial production website and client portal developed for a professional accounting firm. Features clean corporate UI, interactive service showcase, client lead intake, and WhatsApp integration.' },
-              securify: { name: 'Securify', desc: 'Secure authentication interface with a clean, modern UI.' },
-              wisa: { name: 'Wisa', desc: 'SaaS platform showcasing a modern, high-performance user interface.' },
-              nexcrypto: { name: 'NexCrypto', desc: 'Crypto-focused interface with a modern dashboard feel and live-market inspired visuals.' },
-              kineticcourt: { name: 'Kinetic Court', desc: 'Sports-driven concept built with bold composition, motion, and a stronger editorial look.' },
-              watchweb: { name: 'WatchWeb', desc: 'Media streaming web application with a sleek and dynamic layout.' }
+              ms: { name: 'Estudio MS', subtitle: 'Paid Commercial Client Site · Corporate Portal', desc: 'Production website and client intake portal developed for a professional accounting firm. Features clean corporate UI, service showcase, and WhatsApp lead ingestion.' },
+              coffeeweb: { name: 'CoffeeWeb', subtitle: 'Gourmet Coffee Landing & E-Commerce Catalog', desc: 'High-converting specialty coffee web application featuring interactive product menus, cart drawer UI, smooth scroll sections, and modern visual branding.' },
+              astra: { name: 'ASTRA', subtitle: 'Astronomy & Space Exploration Web Application', desc: 'Interactive web application dedicated to astronomy and space exploration. Features detailed information about Planet Earth, cosmic data, and space telemetry in a modern interface.' },
+              watchweb: { name: 'WatchWeb', subtitle: 'Luxury Watch E-Commerce Online Store', desc: 'E-commerce web store specialized in luxury timepieces and fine accessories. Features exclusive product catalog, shopping cart drawer, detailed product cards, and sleek dark mode aesthetics.' },
+              elitestore: { name: 'Elite Store', subtitle: 'Premium Fashion & Lifestyle E-Commerce UI', desc: 'Modern fashion e-commerce storefront featuring product filtering, interactive shopping bag drawer, sleek visual cards, and high-conversion checkout UI.' },
+              construtech: { name: 'Constru-Tech', subtitle: 'Industrial & Construction Corporate Web App', desc: 'Robust industrial corporate website featuring service galleries, project portfolio showcase, client quotation intake form, and responsive design.' },
+              kineticcourt: { name: 'KINETIC COURT', subtitle: 'Basketball Sportswear & Sneakers E-Commerce Store', desc: 'E-commerce web store dedicated to basketball apparel and athletic sneakers. Features interactive product catalog, shopping cart drawer, size selector, and bold athletic typography.' }
             }
           },
           footer: {
@@ -106,7 +124,7 @@ i18n
       es: {
         translation: {
           hero: {
-            role: 'Desarrollador Web Fullstack | Abierto a Oportunidades Remotas',
+            role: 'Desarrollador web frontend | Abierto a Oportunidades Remotas',
             cta_projects: 'Ver Proyectos',
             cta_about: 'Sobre Mi'
           },
@@ -114,20 +132,26 @@ i18n
             status: 'DISPONIBLE PARA TRABAJAR',
             title_p1: 'Perfil',
             title_p2: 'Profesional',
-            description: 'Desarrollador Frontend enfocado en la construcción de aplicaciones web modernas, responsivas y visualmente pulidas utilizando React y tecnologías modernas de JavaScript. Experimentado en la creación de landing pages, interfaces SaaS, dashboards y experiencias de usuario interactivas con fuerte atención al diseño de interfaz, rendimiento y escalabilidad. Actualmente evolucionando hacia un rol Fullstack mientras expando mis conocimientos en desarrollo backend y arquitecturas web modernas.',
+            description: 'Desarrollador Web Frontend enfocado en crear sitios web modernos, landing pages de alta conversión, interfaces SaaS y aplicaciones web interactivas utilizando React, Next.js y TypeScript. Especializado en diseño de interfaz premium, velocidad de carga óptima, maquetación responsiva y experiencias digitales enfocadas en potenciar marcas y productos comerciales.',
             exp_title: 'Experiencia',
             experiences: {
-              onlydust: {
-                role: 'Colaborador Open Source',
-                company: 'OnlyDust',
-                date: 'Sept. 2024 - Presente',
-                desc: 'Contribución en repositorios de código abierto de alto impacto. Enfocado en la implementación de nuevas funcionalidades, optimización de código y resolución de problemas complejos.'
+              estudioms: {
+                role: 'Desarrollador Web (Cliente Comercial)',
+                company: 'Estudio MS (Proyecto Comercial Pago)',
+                date: '2024 - Producción',
+                desc: 'Desarrollo integral de sitio web comercial en producción y portal interactivo para estudio contable profesional. Implementación de diseño corporativo moderno, catálogo interactivo de servicios, captura de leads e integración con WhatsApp API.'
               },
               freelance: {
                 role: 'Desarrollador Frontend',
                 company: 'Freelance & Proyectos Personales',
                 date: '2024 - Presente',
-                desc: 'Desarrollé y diseñé múltiples aplicaciones web modernas e interfaces interactivas para diferentes productos y conceptos digitales. Los proyectos incluyen AstraIA, una interfaz futurista inspirada en IA enfocada en una experiencia de usuario inmersiva; Wisa, una plataforma estilo SaaS con arquitectura de UI moderna y diseños responsivos; y NexCrypto, un concepto de dashboard cripto construido con componentes visuales dinámicos y sistemas de diseño inspirados en tiempo real. Enfocado en el desarrollo responsivo, estructuras de componentes reutilizables, animaciones fluidas y arquitectura frontend escalable utilizando React y ecosistemas modernos de JavaScript.'
+                desc: 'Desarrollo y diseño de aplicaciones web modernas e interfaces digitales para clientes y proyectos destacados. Desarrollo de soluciones personalizadas como CoffeeWeb (landing gourmet & e-commerce de café), ASTRA (plataforma web de astronomía y espacio), WatchWeb (tienda e-commerce de relojes de lujo), Elite Store (tienda e-commerce de moda), Constru-Tech (plataforma web industrial) y KINETIC COURT (tienda e-commerce de ropa deportiva de básquetbol). Enfocado en maquetación responsiva, componentes reutilizables y alta velocidad de carga.'
+              },
+              onlydust: {
+                role: 'Colaborador Open Source',
+                company: 'OnlyDust',
+                date: 'Sept. 2024 - Presente',
+                desc: 'Contribución en repositorios de código abierto de alto impacto. Enfocado en la implementación de nuevas funcionalidades, optimización de código y resolución de problemas complejos.'
               }
             },
             edu_utn: 'Programa de Desarrollo FullStack · 2024',
@@ -165,31 +189,44 @@ i18n
             }
           },
           projects: {
-            section_title: 'Trabajo',
-            section_subtitle: 'Seleccionado',
-            description: 'Una selección de productos, sistemas y experimentos que he diseñado y desarrollado.',
-            projects_count: '06 PROYECTOS / 2024—2026',
-            more_title: 'Otros',
-            more_subtitle: 'Proyectos',
-            github: 'Código',
+            section_title: 'Soluciones',
+            section_subtitle: 'Web Destacadas',
+            description: 'Aplicaciones web Frontend especializadas, sitios web comerciales para clientes, tiendas e-commerce e interfaces digitales interactivas.',
+            projects_count: 'PORTFOLIO FRONTEND / 2024—2026',
+            categories: {
+              all: 'Todos los Proyectos',
+              websites: 'Sitios Web Comerciales',
+              ecommerce: 'Tiendas E-Commerce',
+              interactive: 'Aplicaciones Interactivas'
+            },
+            cta: {
+              badge: 'DISPONIBLE PARA NUEVOS PROYECTOS WEB',
+              title: '¿Impulsamos tu negocio con una página web moderna?',
+              subtitle: 'Transformo diseños e ideas en aplicaciones web de alta conversión y alto rendimiento, optimizadas para Google, ultra rápidas y listas para captar clientes.',
+              button: 'Hablar por LinkedIn',
+              features: {
+                f1: 'Desarrollo Web a Medida',
+                f2: 'Carga Ultra Rápida',
+                f3: 'SEO & Alta Conversión',
+                f4: 'Integración WhatsApp Directa'
+              }
+            },
+            more_title: 'Explorar',
+            more_subtitle: 'Trabajos Frontend',
+            github: 'Código Fuente',
             live: 'Demo en vivo',
-            load_interactive: 'Cargar vista interactiva',
             items: {
-              nexus: { name: 'NEXUS', subtitle: 'Plataforma Autónoma de Operaciones Multi-Agente', desc: 'Plataforma autónoma que investiga incidentes en producción, recupera contexto organizacional, evalúa riesgos de remediación y ejecuta herramientas de recuperación con aprobación humana.' },
-              sentinel: { name: 'SENTINEL AI', subtitle: 'Operaciones de IA Empresarial & Gobernanza de Datos', desc: 'Sistema de incidentes y operaciones de datos impulsado por Gemini 2.5 Flash y el catálogo DataHub. Visualiza dependencias de datos e impactos de negocio mediante grafos de linaje.' },
-              billora: { name: 'BILLORA', subtitle: 'Sistema Operativo Financiero con IA', desc: 'Suite profesional de gestión financiera para administrar facturas, clientes y pagos en tiempo real, potenciada por inteligencia de Gemini en el servidor y gráficos dinámicos.' },
-              momentum: { name: 'MOMENTUM', subtitle: 'Producto SaaS para Gimnasios y Fitness', desc: 'Software SaaS de gestión deportiva con reservas de clases, planificación de entrenamientos, mapas y capa de persistencia dual local-primero sincronizada con Firebase Firestore.' },
-              revrecover: { name: 'RevRecover AI', subtitle: 'Motor de Auditoría de Fugas de Ingresos y Churn', desc: 'Motor de auditoría de churn para B2B SaaS con cálculos de riesgo financiero forense, diagnóstico de deserción y automatización de webhooks de recuperación usando JSON estructurado.' },
-              ms: { name: 'Estudio MS', subtitle: 'Proyecto Cliente Pago Comercial · Estudio Contable', desc: 'Sitio web en producción comercial y portal de clientes desarrollado para estudio contable profesional. Incluye interfaz corporativa limpia, catálogo interactivo de servicios, captura de prospectos e integración con WhatsApp.' },
-              securify: { name: 'Securify', desc: 'Interfaz de autenticación segura con un diseño limpio y moderno.' },
-              wisa: { name: 'Wisa', desc: 'Plataforma SaaS que destaca por una interfaz de usuario moderna y de alto rendimiento.' },
-              nexcrypto: { name: 'NexCrypto', desc: 'Interfaz orientada al mundo cripto con estilo de dashboard moderno y visuales inspirados en mercado en vivo.' },
-              kineticcourt: { name: 'Kinetic Court', desc: 'Concepto ligado al deporte con composicion intensa, movimiento y una estetica mas editorial.' },
-              watchweb: { name: 'WatchWeb', desc: 'Aplicación web de streaming multimedia con un diseño elegante y dinámico.' }
+              ms: { name: 'Estudio MS', subtitle: 'Sitio Web Comercial Pago · Portal para Clientes', desc: 'Sitio web en producción comercial y portal de captura para firma contable profesional. Incluye diseño corporativo limpio, catálogo interactivo e integración directa con WhatsApp.' },
+              coffeeweb: { name: 'CoffeeWeb', subtitle: 'Landing Gourmet de Café & Tienda E-Commerce', desc: 'Aplicación web para marca de café de especialidad con menú interactivo de productos, carrito emergente, secciones fluidas de scroll y diseño estético moderno.' },
+              astra: { name: 'ASTRA', subtitle: 'Plataforma Web de Astronomía & Exploración Espacial', desc: 'Aplicación web interactiva dedicada a la astronomía y la exploración espacial. Muestra información detallada del planeta Tierra, datos espaciales y visuales cósmicos en una interfaz moderna.' },
+              watchweb: { name: 'WatchWeb', subtitle: 'Tienda Web E-Commerce de Relojes de Lujo', desc: 'Plataforma web e-commerce de relojería fina y accesorios de lujo. Incluye catálogo de modelos exclusivos, carrito de compras emergente, fichas detalladas de producto y diseño oscuro elegante.' },
+              elitestore: { name: 'Elite Store', subtitle: 'Tienda E-Commerce de Moda & Estilo de Vida', desc: 'Tienda online de moda con filtrado de productos, carrito de compras interactivo, tarjetas de presentación modernas e interfaz enfocada en conversión.' },
+              construtech: { name: 'Constru-Tech', subtitle: 'Aplicación Web Corporativa para Construcción', desc: 'Plataforma web corporativa para el sector industrial con galería de servicios, portfolio de obras finalizadas, formulario de presupuesto y diseño adaptable.' },
+              kineticcourt: { name: 'KINETIC COURT', subtitle: 'Tienda E-Commerce de Ropa & Calzado de Básquetbol', desc: 'Tienda web e-commerce de indumentaria deportiva y calzado especializado de básquetbol. Incluye catálogo interactivo de prendas, sistema de carrito de compras, selección de tallas y tipografía editorial audaz.' }
             }
           },
           footer: {
-            dev_by: 'Disenado y Desarrollado por mi.',
+            dev_by: 'Diseñado y Desarrollado por mi.',
             location: 'Desde'
           }
         }
