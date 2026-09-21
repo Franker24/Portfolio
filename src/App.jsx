@@ -4,8 +4,10 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Info from './components/Info';
 import Projects from './components/Proyectos';
+import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
+import ParticlesBackground from './components/ParticlesBackground';
 
 function App() {
   // Loader desactivado por requerimiento (componente Loader preservado intacto en ./components/Loader)
@@ -40,12 +42,14 @@ function App() {
         <Loader />
       ) : (
         <div style={appStyle}>
+          <ParticlesBackground theme={theme} />
           <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-          <main style={{ width: '100%', flex: 1 }}>
+          <main style={{ width: '100%', flex: 1, position: 'relative', zIndex: 1 }}>
             <Hero />
             <Info />
             <Projects theme={theme} />
+            <Pricing theme={theme} />
           </main>
 
           <Footer />

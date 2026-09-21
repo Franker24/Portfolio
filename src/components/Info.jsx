@@ -212,7 +212,7 @@ const Info = () => {
 
   const responsiveSectionStyle = {
     padding: isMobile ? '4rem 1.25rem' : '8rem 2rem',
-    backgroundColor: 'var(--bg-color)',
+    backgroundColor: 'transparent',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

@@ -9,14 +9,16 @@ const Footer = () => {
     <footer 
       style={{ 
         padding: '4rem 2rem',
-        backgroundColor: '#000000', 
-        borderTop: '1px solid rgba(91, 66, 243, 0.15)',
+        backgroundColor: 'transparent', 
+        borderTop: '1px solid rgba(91, 66, 243, 0.25)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: '1.25rem',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        position: 'relative',
+        zIndex: 2
       }}
     >
       <div style={{ 

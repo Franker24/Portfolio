@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaGithub, FaExternalLinkAlt, FaShieldAlt, FaBolt, FaChartLine, FaTrophy, FaPlayCircle, FaRocket, FaLinkedin, FaCoffee, FaStore, FaBuilding, FaRobot, FaLaptopCode, FaFilm, FaCheckCircle, FaPalette, FaComments } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaShieldAlt, FaBolt, FaChartLine, FaTrophy, FaPlayCircle, FaRocket, FaLinkedin, FaCoffee, FaStore, FaBuilding, FaRobot, FaLaptopCode, FaFilm, FaCheckCircle, FaPalette, FaComments, FaGavel, FaHome } from 'react-icons/fa';
 
 const themePalette = {
   dark: {
-    sectionBg: '#000000',
+    sectionBg: 'transparent',
     panelBg: '#050505',
     title: '#ffffff',
     body: '#cbd5e1',
@@ -19,7 +19,7 @@ const themePalette = {
     metaBg: 'rgba(255, 255, 255, 0.02)'
   },
   light: {
-    sectionBg: '#f8fafc',
+    sectionBg: 'transparent',
     panelBg: '#ffffff',
     title: '#0f172a',
     body: '#334155',
@@ -35,7 +35,7 @@ const themePalette = {
   }
 };
 
-// Los 7 Proyectos Frontend Seleccionados con URLs y Previews Oficiales
+// Los 5 Proyectos Frontend Seleccionados (Estudio MS, Perfumería, Abogado, Real Estate, Constru-Tech)
 const projectsData = [
   {
     id: 'ms',
@@ -50,52 +50,40 @@ const projectsData = [
     insideTheBuild: ['Producción Comercial en Vivo', 'Captura de Leads e Integración WhatsApp Directa', 'Diseño Responsivo Corporativo de Alta Conversión'],
   },
   {
-    id: 'coffeeweb',
+    id: 'abogado',
     category: 'websites',
-    accent: '#d97706',
-    badge: 'GOURMET & E-COMMERCE LANDING',
-    tags: ['React 19', 'TypeScript', 'Tailwind CSS', 'Gourmet Coffee', 'E-Commerce Catalog', 'Smooth Scroll'],
-    github: 'https://github.com/Franker24/CoffeeWeb',
-    demo: 'https://coffee-web-peach.vercel.app/',
-    image: '/imgproyectos/coffee.png',
-    icon: FaCoffee,
-    insideTheBuild: ['Menú de Café Especial con Catálogo Interactivo', 'Carrito Flotante de Pedidos', 'Diseño Visual Premium Orientado a Marcas'],
+    accent: '#eab308',
+    badge: 'WEB INSTITUCIONAL / LEGAL',
+    tags: ['React', 'TypeScript', 'Responsive Design', 'Modern UI', 'Component-Based Architecture', 'Contact Forms'],
+    github: 'https://github.com/Franker24/estudio-juridico',
+    demo: 'https://estudio-juridico-ten-ebon.vercel.app/',
+    image: '/imgproyectos/abogado.png',
+    icon: FaGavel,
+    insideTheBuild: ['Presentación Profesional de Servicios Legales', 'Arquitectura de Información Clara y Estratégica', 'Diseño Orientado a Confianza y Conversión', 'Experiencia Responsive para Desktop & Mobile'],
   },
   {
-    id: 'astra',
-    category: 'interactive',
-    accent: '#06b6d4',
-    badge: 'ASTRONOMY & SPACE WEB APP',
-    tags: ['React 19', 'TypeScript', 'Space Telemetry', 'Astronomy Data', 'Interactive Cards', 'Responsive UI'],
-    github: 'https://github.com/Franker24/ASTRA',
-    demo: 'https://astra-eight-steel.vercel.app/',
-    image: '/imgproyectos/astra.png',
-    icon: FaRocket,
-    insideTheBuild: ['Información Interactiva de la Tierra & Espacio', 'Tarjetas Informativas Astronómicas en Tiempo Real', 'Diseño Cósmico Moderno & Responsivo'],
+    id: 'realestate',
+    category: 'websites',
+    accent: '#3b82f6',
+    badge: 'PLATAFORMA INMOBILIARIA',
+    tags: ['React', 'TypeScript', 'Real Estate UI', 'Property Listings', 'Responsive Design', 'Interactive Components', 'Modern UX'],
+    github: 'https://github.com/Franker24/Real-state',
+    demo: 'https://realstate-xi-ebon.vercel.app/',
+    image: '/imgproyectos/real state.png',
+    icon: FaHome,
+    insideTheBuild: ['Catálogo Interactivo de Propiedades', 'Sección de Propiedades Destacadas', 'Navegación Orientada a Conversión', 'Diseño Premium Responsive'],
   },
   {
-    id: 'watchweb',
+    id: 'perfumeria',
     category: 'ecommerce',
-    accent: '#ef4444',
-    badge: 'LUXURY WATCH E-COMMERCE',
-    tags: ['JavaScript', 'Luxury Watches', 'E-Commerce Store', 'Shopping Cart', 'Dark Mode UI'],
-    github: 'https://github.com/Franker24/WatchWeb',
-    demo: 'https://watch-web-gules.vercel.app',
-    image: '/imgproyectos/watchweb.png',
+    accent: '#ec4899',
+    badge: 'E-COMMERCE PREMIUM',
+    tags: ['React 19', 'TypeScript', 'E-Commerce UI', 'Luxury Branding', 'Cart Drawer', 'Product Catalog', 'Responsive Layout'],
+    github: 'https://github.com/Franker24/perfumeria',
+    demo: 'https://perfumeria-kappa.vercel.app/',
+    image: '/imgproyectos/perfumeria.png',
     icon: FaStore,
-    insideTheBuild: ['Catálogo de Relojes Exclusivos de Lujo', 'Carrito de Compras Emergente', 'Fichas Detalladas de Producto & Diseño Elegante'],
-  },
-  {
-    id: 'elitestore',
-    category: 'ecommerce',
-    accent: '#f59e0b',
-    badge: 'PREMIUM FASHION E-COMMERCE',
-    tags: ['React 19', 'TypeScript', 'Fashion E-Commerce', 'Shopping Cart Drawer', 'High Conversion UI'],
-    github: 'https://github.com/Franker24/Elite-Store',
-    demo: 'https://elite-store-xi.vercel.app/',
-    image: '/imgproyectos/elite.png',
-    icon: FaStore,
-    insideTheBuild: ['Catálogo de Moda con Filtrado Dinámico', 'Gaveta Interactiva de Carrito de Compras', 'Interfaz Comercial Diseñada para Conversión'],
+    insideTheBuild: ['Catálogo Interactivo de Fragancias & Productos Exclusivos', 'Gaveta Flotante de Carrito de Compras', 'Diseño de Interfaz Premium de Alta Conversión', 'Experiencia de Compra Responsive'],
   },
   {
     id: 'construtech',
@@ -108,18 +96,6 @@ const projectsData = [
     image: '/imgproyectos/construtech.png',
     icon: FaBuilding,
     insideTheBuild: ['Plataforma Web Corporativa para Construcción', 'Galería de Obras Finalizadas & Proyectos', 'Formulario de Solicitud de Presupuesto'],
-  },
-  {
-    id: 'kineticcourt',
-    category: 'ecommerce',
-    accent: '#3b82f6',
-    badge: 'BASKETBALL SPORTSWEAR E-COMMERCE',
-    tags: ['TypeScript', 'Basketball Apparel', 'E-Commerce Cart', 'Size Selector', 'Editorial Typography'],
-    github: 'https://github.com/Franker24/KINETIC-COURT',
-    demo: 'https://kinetic-court.vercel.app',
-    image: '/imgproyectos/kineticcourt.png',
-    icon: FaTrophy,
-    insideTheBuild: ['Catálogo de Ropa & Calzado de Básquetbol', 'Sistema de Carrito de Compras & Selección de Tallas', 'Diseño Editorial Deportivo de Alto Impacto'],
   }
 ];
 
@@ -138,8 +114,7 @@ const Projects = ({ theme = 'dark' }) => {
   const categories = [
     { key: 'all', label: t('projects.categories.all') },
     { key: 'websites', label: t('projects.categories.websites') },
-    { key: 'ecommerce', label: t('projects.categories.ecommerce') },
-    { key: 'interactive', label: t('projects.categories.interactive') }
+    { key: 'ecommerce', label: t('projects.categories.ecommerce') }
   ];
 
   const filteredProjects = activeCategory === 'all'
@@ -418,149 +393,6 @@ const Projects = ({ theme = 'dark' }) => {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* BANNER DE LLAMADO A LA ACCIÓN COMERCIAL PREMIUM */}
-      <div style={{
-        width: '100%',
-        maxWidth: '1240px',
-        margin: isMobile ? '4.5rem auto 0' : '7rem auto 0',
-        padding: '0 1.5rem',
-        boxSizing: 'border-box'
-      }}>
-        <div style={{
-          borderRadius: '36px',
-          background: 'radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.2) 0%, rgba(91, 66, 243, 0.15) 50%, rgba(10, 10, 10, 0.95) 100%)',
-          border: '1px solid rgba(59, 130, 246, 0.4)',
-          padding: isMobile ? '3rem 1.5rem' : '4.5rem 3.5rem',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1.5rem',
-          boxShadow: '0 25px 60px -15px rgba(59, 130, 246, 0.25)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          {/* Status Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            padding: '6px 16px',
-            borderRadius: '100px'
-          }}>
-            <span className="pulse-dot" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981' }}></span>
-            <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#10b981', letterSpacing: '1px' }}>
-              {t('projects.cta.badge')}
-            </span>
-          </div>
-
-          <h3 style={{
-            fontSize: isMobile ? '2rem' : '3.2rem',
-            fontWeight: '900',
-            color: colors.title,
-            margin: 0,
-            letterSpacing: '-1.5px',
-            lineHeight: '1.15',
-            maxWidth: '850px'
-          }}>
-            {t('projects.cta.title')}
-          </h3>
-
-          <p style={{
-            fontSize: isMobile ? '0.98rem' : '1.18rem',
-            color: colors.body,
-            maxWidth: '750px',
-            lineHeight: '1.65',
-            margin: 0
-          }}>
-            {t('projects.cta.subtitle')}
-          </p>
-
-          {/* Feature Pills */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '10px',
-            marginTop: '0.5rem',
-            marginBottom: '0.5rem'
-          }}>
-            {[
-              { icon: FaBolt, text: t('projects.cta.features.f2'), color: '#3b82f6' },
-              { icon: FaPalette, text: t('projects.cta.features.f1'), color: '#AF40FF' },
-              { icon: FaCheckCircle, text: t('projects.cta.features.f3'), color: '#10b981' },
-              { icon: FaComments, text: t('projects.cta.features.f4'), color: '#06b6d4' }
-            ].map((f, i) => {
-              const FIcon = f.icon;
-              return (
-                <div key={i} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '8px 16px',
-                  borderRadius: '100px',
-                  fontSize: '0.8rem',
-                  fontWeight: '700',
-                  color: colors.title
-                }}>
-                  <FIcon style={{ color: f.color, fontSize: '0.9rem' }} />
-                  <span>{f.text}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
-            <a
-              href="https://www.linkedin.com/in/francisco-kacmajor-927a16195/"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '0.95rem 2.2rem',
-                borderRadius: '100px',
-                background: 'linear-gradient(135deg, #00DDEB, #5B42F3)',
-                color: '#ffffff',
-                fontWeight: '800',
-                fontSize: '1rem',
-                textDecoration: 'none',
-                boxShadow: '0 12px 30px rgba(91, 66, 243, 0.45)',
-                transition: 'all 0.25s ease'
-              }}
-            >
-              <FaLinkedin size={20} /> {t('projects.cta.button')}
-            </a>
-            <a
-              href="https://github.com/Franker24"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '0.95rem 2.2rem',
-                borderRadius: '100px',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                border: `1px solid ${colors.borderCol}`,
-                color: colors.title,
-                fontWeight: '800',
-                fontSize: '1rem',
-                textDecoration: 'none',
-                transition: 'all 0.25s ease'
-              }}
-            >
-              <FaGithub size={20} /> GitHub Profile
-            </a>
-          </div>
         </div>
       </div>
     </section>

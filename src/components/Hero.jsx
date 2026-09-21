@@ -77,7 +77,8 @@ const sectionStyle = {
   color: '#ffffff',
   padding: '6rem 1.5rem 4rem',
   backgroundColor: '#000000',
-  position: 'relative'
+  position: 'relative',
+  zIndex: 2
 };
 
 const backgroundLayerStyle = {
@@ -86,7 +87,7 @@ const backgroundLayerStyle = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundImage: `radial-gradient(circle at center, rgba(91, 66, 243, 0.15) 0%, rgba(0,0,0,0.85) 100%), url('/hero.svg.png')`,
+  backgroundImage: `radial-gradient(circle at center, rgba(91, 66, 243, 0.18) 0%, rgba(0,0,0,0.95) 100%), url('/hero.svg.png')`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   zIndex: 1,
