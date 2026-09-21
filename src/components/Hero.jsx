@@ -1,8 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaArrowRight, FaRocket, FaPalette, FaBolt, FaCode } from 'react-icons/fa';
 
 const Hero = () => {
   const { t } = useTranslation();
+
+  const firstName = "Francisco Javier";
+  const lastName = "Kacmajor";
+
+  // 1. Configuración de Roles para Typewriter
+  const roles = t('hero.roles', { returnObjects: true }) || [
+    'Desarrollador Web Frontend',
+    'Especialista en React & Next.js',
+    'Creador de Interfaces UI/UX',
+    'Desarrollador de Aplicaciones Web'
+  ];
+
+  const roleList = Array.isArray(roles) ? roles : [roles];
+  const [typedText, setTypedText] = useState('');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // 2. Efecto Máquina de Escribir (Typewriter)
+  useEffect(() => {
+    const currentRole = roleList[roleIndex] || '';
+    let timer;
+
+    if (!isDeleting && typedText === currentRole) {
+      timer = setTimeout(() => setIsDeleting(true), 2200);
+    } else if (isDeleting && typedText === '') {
+      setIsDeleting(false);
+      setRoleIndex((prev) => (prev + 1) % roleList.length);
+    } else {
+      const speed = isDeleting ? 35 : 75;
+      timer = setTimeout(() => {
+        setTypedText(
+          isDeleting
+            ? currentRole.substring(0, typedText.length - 1)
+            : currentRole.substring(0, typedText.length + 1)
+        );
+      }, speed);
+    }
+
+    return () => clearTimeout(timer);
+  }, [typedText, isDeleting, roleIndex, roleList]);
 
   const handleScroll = (e, targetId) => {
     e.preventDefault();
@@ -19,20 +60,129 @@ const Hero = () => {
     >
       <div style={backgroundLayerStyle} />
 
-      <div style={{ zIndex: 10, position: 'relative', maxWidth: '900px', width: '100%' }}>
-        <h1 style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-2px', color: '#ffffff' }}>
-          Francisco Javier <span style={{ color: '#3b82f6' }}>Kacmajor</span>
+      <div style={{ zIndex: 10, position: 'relative', maxWidth: '920px', width: '100%' }}>
+
+        {/* 1. BADGE DE ESTADO CON PULSO EN VERDE NEÓN */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '10px',
+          backgroundColor: 'rgba(16, 185, 129, 0.12)',
+          border: '1px solid rgba(16, 185, 129, 0.35)',
+          padding: '7px 18px',
+          borderRadius: '100px',
+          marginBottom: '1.8rem',
+          boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)'
+        }}>
+          <span className="pulse-dot" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981' }}></span>
+          <span style={{ fontSize: '0.74rem', fontWeight: '800', color: '#10b981', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+            {t('hero.badge') || 'DISPONIBLE PARA NUEVOS PROYECTOS & TRABAJO REMOTO'}
+          </span>
+        </div>
+
+        {/* 2. TÍTULO CON ANIMACIÓN LETRA POR LETRA Y DESTELLO EN KACMAJOR */}
+        <h1 style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', fontWeight: '800', marginBottom: '1rem', letterSpacing: '-2px', color: '#ffffff', lineHeight: '1.1' }}>
+          {firstName.split('').map((char, index) => (
+            <span
+              key={`fn-${index}`}
+              className="letter-animate"
+              style={{ animationDelay: `${index * 0.035}s` }}
+            >
+              {char}
+            </span>
+          ))}
+          {' '}
+          <span style={{ color: '#3b82f6', display: 'inline-block', textShadow: '0 0 25px rgba(59, 130, 246, 0.4)' }}>
+            {lastName.split('').map((char, index) => (
+              <span
+                key={`ln-${index}`}
+                className="letter-animate"
+                style={{ animationDelay: `${(firstName.length + index + 1) * 0.035}s` }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
         </h1>
 
-        <h2 style={{ fontSize: 'clamp(1.15rem, 3.5vw, 1.75rem)', color: '#94a3b8', marginBottom: '2.5rem', fontWeight: '300', lineHeight: '1.4' }}>
-          {t('hero.role')}
+        {/* 3. SUBTÍTULO CON EFECTO MÁQUINA DE ESCRIBIR */}
+        <h2 
+          style={{ 
+            fontSize: 'clamp(1.15rem, 3.5vw, 1.75rem)', 
+            color: '#cbd5e1', 
+            marginBottom: '2.5rem', 
+            fontWeight: '400', 
+            lineHeight: '1.4',
+            minHeight: '2.6rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <span style={{ color: '#3b82f6', fontWeight: '700' }}>{typedText}</span>
+          <span className="typewriter-cursor">|</span>
         </h2>
 
-        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+        {/* 4. BOTONES DE ACCIÓN PRINCIPALES */}
+        <div 
+          className="letter-animate"
+          style={{ 
+            display: 'flex', 
+            gap: '1.5rem', 
+            flexWrap: 'wrap', 
+            justifyContent: 'center',
+            marginBottom: '2.5rem',
+            animationDelay: `${(firstName.length + lastName.length + 5) * 0.035}s`
+          }}
+        >
           <NitroButton onClick={(e) => handleScroll(e, '#projects')} href="#projects" text={t('hero.cta_projects')} primary />
           <NitroButton onClick={(e) => handleScroll(e, '#info')} href="#info" text={t('hero.cta_about')} />
         </div>
+
       </div>
+
+      {/* 6. INDICADOR DE SCROLL ANIMADO */}
+      <a
+        href="#info"
+        onClick={(e) => handleScroll(e, '#info')}
+        style={{
+          position: 'absolute',
+          bottom: '1.8rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '6px',
+          color: '#94a3b8',
+          textDecoration: 'none',
+          zIndex: 10,
+          cursor: 'pointer',
+          animation: 'bounceSlow 2s infinite'
+        }}
+      >
+        <span style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: '800' }}>
+          SCROLL
+        </span>
+        <div style={{
+          width: '20px',
+          height: '32px',
+          borderRadius: '100px',
+          border: '2px solid rgba(255, 255, 255, 0.22)',
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'center',
+          paddingTop: '6px'
+        }}>
+          <div style={{
+            width: '4px',
+            height: '8px',
+            borderRadius: '2px',
+            backgroundColor: '#3b82f6',
+            animation: 'scrollDot 1.5s infinite'
+          }} />
+        </div>
+      </a>
     </section>
   );
 };
@@ -55,11 +205,17 @@ const NitroButton = ({ href, text, primary, onClick }) => {
         ...nitroInnerStyle,
         backgroundColor: primary ? '#050505' : '#0f172a',
       }}>
-        {text}
+        <span>{text}</span>
         {primary && (
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style={{marginLeft: '8px'}}>
-            <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-          </svg>
+          <FaArrowRight 
+            style={{ 
+              marginLeft: '10px', 
+              fontSize: '0.9rem', 
+              display: 'inline-block',
+              verticalAlign: 'middle',
+              transition: 'transform 0.2s ease'
+            }} 
+          />
         )}
       </div>
     </a>

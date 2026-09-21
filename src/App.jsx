@@ -19,6 +19,25 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // Observer global de animaciones de entrada al hacer scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    const elements = document.querySelectorAll('.reveal-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
@@ -52,7 +71,7 @@ function App() {
             <Pricing theme={theme} />
           </main>
 
-          <Footer />
+          <Footer theme={theme} />
         </div>
       )}
     </>

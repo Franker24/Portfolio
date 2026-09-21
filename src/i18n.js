@@ -15,6 +15,13 @@ i18n
         translation: {
           hero: {
             role: 'Frontend Web Developer | Open to Remote Opportunities',
+            badge: 'AVAILABLE FOR NEW PROJECTS & REMOTE ROLES',
+            roles: [
+              'Frontend Web Developer',
+              'React & Next.js Specialist',
+              'High-Converting UI/UX Creator',
+              'Custom Web Application Builder'
+            ],
             cta_projects: 'View Projects',
             cta_about: 'About Me'
           },
@@ -210,7 +217,14 @@ i18n
       es: {
         translation: {
           hero: {
-            role: 'Desarrollador web frontend | Abierto a Oportunidades Remotas',
+            role: 'Desarrollador Web Frontend | Abierto a Oportunidades Remotas',
+            badge: 'DISPONIBLE PARA NUEVOS PROYECTOS & TRABAJO REMOTO',
+            roles: [
+              'Desarrollador Web Frontend',
+              'Especialista en React & Next.js',
+              'Creador de Interfaces UI/UX de Alta Conversión',
+              'Desarrollador de Aplicaciones Web a Medida'
+            ],
             cta_projects: 'Ver Proyectos',
             cta_about: 'Sobre Mi'
           },

@@ -282,7 +282,7 @@ const Info = () => {
     <section id="info" style={responsiveSectionStyle}>
 
       {/* SUMMARY BOX */}
-      <div style={summaryWrapperStyle}>
+      <div style={summaryWrapperStyle} className="reveal-on-scroll">
         <div style={responsiveSummaryBoxStyle} className="hover-card">
           <div style={statusBadgeStyle}>
             <div style={pulseDotStyle}></div>
@@ -296,14 +296,14 @@ const Info = () => {
       </div>
 
       {/* EXPERIENCE */}
-      <div style={{ width: '100%', maxWidth: '1000px', zIndex: 1 }}>
+      <div style={{ width: '100%', maxWidth: '1000px', zIndex: 1 }} className="reveal-on-scroll">
         <h3 style={neonTitleStyle}>{t('info.exp_title')}</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {experiences.map((exp, idx) => {
             const ExpIcon = exp.icon;
             return (
               <div key={idx} style={{ width: '100%' }}>
-                <div style={responsiveExpCardStyle} className="hover-card">
+                <div style={responsiveExpCardStyle} className="hover-card reveal-on-scroll">
                   <div style={expHeaderStyle}>
                     <ExpIcon style={{ color: exp.color, fontSize: '2.5rem' }} />
                     <div>
@@ -321,7 +321,7 @@ const Info = () => {
       </div>
 
       {/* SKILLS CATEGORY GRID */}
-      <div style={{ width: '100%', maxWidth: '1300px', zIndex: 1, marginTop: '1rem' }}>
+      <div style={{ width: '100%', maxWidth: '1300px', zIndex: 1, marginTop: '1rem' }} className="reveal-on-scroll">
         <h3 style={neonTitleStyle}>{t('info.tech_stack')}</h3>
         <div style={responsiveCategoryGridStyle}>
           {skillCategories.map((category, index) => (
@@ -338,7 +338,7 @@ const Info = () => {
       </div>
 
       {/* EDUCATION TAGS */}
-      <div style={educationWrapperStyle}>
+      <div style={educationWrapperStyle} className="reveal-on-scroll">
         <div style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '280px', maxWidth: '500px' }}>
           <EduTag icon={FaUniversity} title="UTN FRBA" subtitle={t('info.edu_utn')} color="#3b82f6" isMobile={isMobile} />
         </div>

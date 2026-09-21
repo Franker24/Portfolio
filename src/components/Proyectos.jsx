@@ -131,7 +131,7 @@ const Projects = ({ theme = 'dark' }) => {
       }}
     >
       {/* CABECERA DE SECCIÓN */}
-      <div style={{ marginBottom: isMobile ? '2.5rem' : '4.5rem', textAlign: 'center', padding: '0 1.5rem' }}>
+      <div className="reveal-on-scroll" style={{ marginBottom: isMobile ? '2.5rem' : '4.5rem', textAlign: 'center', padding: '0 1.5rem' }}>
         <span style={{
           fontSize: '0.75rem',
           fontWeight: '900',
@@ -205,7 +205,7 @@ const Projects = ({ theme = 'dark' }) => {
         </div>
       </div>
 
-      {/* COMPOSICIÓN DE LOS 7 PROYECTOS FRONTEND CON IMÁGENES REALES */}
+      {/* COMPOSICIÓN DE LOS PROYECTOS FRONTEND CON IMÁGENES REALES */}
       <div style={{ width: '100%', maxWidth: '1240px', margin: '0 auto', padding: '0 1.5rem', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '3rem' : '4.5rem' }}>
           {filteredProjects.map((project, index) => {
@@ -216,7 +216,7 @@ const Projects = ({ theme = 'dark' }) => {
             return (
               <div
                 key={project.id}
-                className="hover-card"
+                className="hover-card reveal-on-scroll"
                 style={{
                   display: 'flex',
                   flexDirection: isMobile ? 'column' : (isLeft ? 'row' : 'row-reverse'),

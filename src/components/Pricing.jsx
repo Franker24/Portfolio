@@ -15,7 +15,9 @@ const themePalette = {
     accentLink: '#3b82f6',
     cardBg: 'rgba(255, 255, 255, 0.02)',
     featuredBg: 'radial-gradient(circle at 50% 0%, rgba(91, 66, 243, 0.2) 0%, rgba(5, 5, 5, 0.98) 100%)',
-    featuredBorder: 'rgba(147, 51, 234, 0.5)'
+    featuredBorder: 'rgba(147, 51, 234, 0.5)',
+    termsBg: 'radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, rgba(5, 5, 5, 0.95) 100%)',
+    termsBorder: 'rgba(59, 130, 246, 0.25)'
   },
   light: {
     sectionBg: 'transparent',
@@ -28,7 +30,9 @@ const themePalette = {
     accentLink: '#2563eb',
     cardBg: '#ffffff',
     featuredBg: 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)',
-    featuredBorder: 'rgba(91, 66, 243, 0.4)'
+    featuredBorder: 'rgba(91, 66, 243, 0.4)',
+    termsBg: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+    termsBorder: 'rgba(37, 99, 235, 0.25)'
   }
 };
 
@@ -113,7 +117,7 @@ const Pricing = ({ theme = 'dark' }) => {
       }}
     >
       {/* CABECERA DE LA SECCIÓN DE PRECIOS */}
-      <div style={{ marginBottom: isMobile ? '2.5rem' : '4.5rem', textAlign: 'center', padding: '0 1.5rem' }}>
+      <div className="reveal-on-scroll" style={{ marginBottom: isMobile ? '2.5rem' : '4.5rem', textAlign: 'center', padding: '0 1.5rem' }}>
         <span style={{
           fontSize: '0.75rem',
           fontWeight: '900',
@@ -418,7 +422,7 @@ const Pricing = ({ theme = 'dark' }) => {
         </div>
 
         {/* SECCIÓN: SERVICIOS ADICIONALES */}
-        <div style={{
+        <div className="reveal-on-scroll" style={{
           marginTop: isMobile ? '3.5rem' : '5rem',
           padding: isMobile ? '2rem 1.5rem' : '3rem 2.5rem',
           borderRadius: '28px',
@@ -522,12 +526,13 @@ const Pricing = ({ theme = 'dark' }) => {
         </div>
 
         {/* SECCIÓN: CONDICIONES COMERCIALES */}
-        <div style={{
+        <div className="reveal-on-scroll" style={{
           marginTop: '2rem',
           padding: isMobile ? '2rem 1.5rem' : '2.5rem 2.5rem',
           borderRadius: '28px',
-          background: 'radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, rgba(5, 5, 5, 0.95) 100%)',
-          border: '1px solid rgba(59, 130, 246, 0.25)'
+          background: colors.termsBg,
+          border: `1px solid ${colors.termsBorder}`,
+          boxShadow: theme === 'light' ? '0 10px 30px rgba(0,0,0,0.03)' : 'none'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.2rem' }}>
             <FaHandshake style={{ color: colors.accentLink, fontSize: '1.4rem' }} />
@@ -557,7 +562,7 @@ const Pricing = ({ theme = 'dark' }) => {
         </div>
 
         {/* CALLOUT PARA CONSULTAS DE PROYECTOS */}
-        <div style={{
+        <div className="reveal-on-scroll" style={{
           marginTop: '3.5rem',
           textAlign: 'center',
           padding: '2rem',
